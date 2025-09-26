@@ -1,0 +1,4 @@
+# 创建 .gitignore 文件
+echo "nul" >> .gitignore
+echo "*.tmp" >> .gitignore
+echo "Thumbs.db" >> .gitignore

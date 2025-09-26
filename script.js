@@ -73,8 +73,28 @@ const observer = new IntersectionObserver((entries) => {
     });
 }, observerOptions);
 
+// 初始化文章显示
+function initializeArticles() {
+    const articlesGrid = document.querySelector('.articles-grid');
+    if (!articlesGrid) return;
+
+    // 显示前4个文章
+    const initialArticles = articlesDatabase.slice(0, 4);
+    initialArticles.forEach(article => {
+        const articleCard = createArticleCard(article);
+        articlesGrid.appendChild(articleCard);
+        observer.observe(articleCard);
+    });
+}
+
 // Observe elements for animation
 document.addEventListener('DOMContentLoaded', () => {
+    // 初始化作品展示
+    initializeWorks();
+
+    // 初始化文章显示
+    initializeArticles();
+
     // Observe article cards
     document.querySelectorAll('.article-card').forEach(card => {
         observer.observe(card);
@@ -157,6 +177,70 @@ function typeWriter() {
 window.addEventListener('load', () => {
     setTimeout(typeWriter, 1000);
 });
+
+// 作品数据库配置
+const worksDatabase = [
+    {
+        title: 'Unity 3D游戏项目',
+        excerpt: '使用Unity引擎开发的3D冒险游戏，包含完整的角色控制和战斗系统。',
+        category: '游戏开发',
+        date: '2024-01-20',
+        video: 'https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4',
+        tech: ['Unity', 'C#', '3D建模', '动画'],
+        description: '这是一个完整的3D冒险游戏项目，使用Unity引擎开发。游戏包含复杂的角色控制系统、实时战斗机制、任务系统和精美的3D场景。项目历时6个月完成，充分展示了Unity游戏开发的全流程。',
+        details: '项目包含5个关卡，20种敌人类型，完整的音效系统和UI界面。使用了Unity的PhysX物理引擎和Post-processing Stack来实现高质量的视觉效果。'
+    },
+    {
+        title: 'Web应用管理系统',
+        excerpt: '基于React和Node.js的现代化Web应用管理系统',
+        category: 'Web开发',
+        date: '2024-01-15',
+        video: 'video/胶囊大作战项目展示.mp4',
+        tech: ['React', 'Node.js', 'MongoDB', 'Express'],
+        description: '一个功能完善的Web应用管理系统，支持用户管理、数据分析和实时监控。采用前后端分离架构，具有良好的扩展性和维护性。',
+        details: '系统包含用户认证、权限管理、数据可视化、实时通知等功能。使用了JWT进行身份验证，Socket.io实现实时通信。'
+    },
+    {
+        title: '移动端APP开发',
+        excerpt: '跨平台移动应用，支持iOS和Android双端',
+        category: '移动开发',
+        date: '2024-01-10',
+        video: 'https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4',
+        tech: ['React Native', 'TypeScript', 'Firebase'],
+        description: '使用React Native开发的跨平台移动应用，一次编码多端运行。应用具有流畅的用户体验和原生性能。',
+        details: '应用包含社交功能、实时聊天、地图定位等模块。使用了Firebase作为后端服务，支持推送通知和数据同步。'
+    },
+    {
+        title: 'AI机器学习项目',
+        excerpt: '基于深度学习的图像识别系统',
+        category: '人工智能',
+        date: '2024-01-05',
+        video: 'https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4',
+        tech: ['Python', 'TensorFlow', 'OpenCV', 'Docker'],
+        description: '使用深度学习技术开发的图像识别系统，能够准确识别多种物体和场景。项目包含数据预处理、模型训练和部署等完整流程。',
+        details: '系统准确率达到95%以上，支持实时图像识别和批量处理。使用了卷积神经网络(CNN)和数据增强技术。'
+    },
+    {
+        title: '区块链DApp项目',
+        excerpt: '去中心化应用(DApp)，基于以太坊平台',
+        category: '区块链',
+        date: '2023-12-28',
+        video: 'https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4',
+        tech: ['Solidity', 'Web3.js', 'React', 'IPFS'],
+        description: '基于以太坊区块链的去中心化应用，实现了智能合约和代币经济系统。项目展示了区块链技术的实际应用。',
+        details: 'DApp包含钱包连接、智能合约交互、去中心化存储等功能。使用了MetaMask进行用户认证，IPFS存储文件。'
+    },
+    {
+        title: 'VR虚拟现实项目',
+        excerpt: '沉浸式VR体验项目，支持多种VR设备',
+        category: 'VR/AR',
+        date: '2023-12-20',
+        video: 'https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4',
+        tech: ['Unity', 'C#', 'Oculus SDK', 'VRTK'],
+        description: '使用Unity开发的VR虚拟现实项目，提供沉浸式的虚拟体验。支持多种VR设备，具有直观的交互方式。',
+        details: '项目包含虚拟环境漫游、物体交互、手势识别等功能。优化了性能和用户体验，支持60fps的流畅运行。'
+    }
+];
 
 // 文章数据库配置
 const articlesDatabase = [
@@ -268,9 +352,9 @@ const articlesDatabase = [
 ];
 
 // Load more functionality
-const loadMoreBtn = document.querySelector('.load-more .btn');
-let articleCount = 6; // Initial number of articles
-let articlesPerLoad = 3; // Number of articles to load each time
+const loadMoreBtn = document.querySelector('.articles .load-more .btn');
+let articleCount = 4; // Initial number of articles
+let articlesPerLoad = 2; // Number of articles to load each time
 let maxArticles = 15; // Maximum number of articles to show
 
 if (loadMoreBtn) {
@@ -302,6 +386,87 @@ if (loadMoreBtn) {
             // Hide button if we have enough articles or no more articles
             if (articleCount >= maxArticles || articleCount >= articlesDatabase.length) {
                 this.innerHTML = '没有更多文章了';
+                this.disabled = true;
+                this.style.opacity = '0.5';
+                this.style.cursor = 'not-allowed';
+            }
+        }, 1000);
+    });
+}
+
+// Function to create work card
+function createWorkCard(work) {
+    const card = document.createElement('div');
+    card.className = 'work-card';
+
+    // 生成技术标签HTML
+    const techTags = work.tech.map(tech => `<span class="tech-tag">${tech}</span>`).join('');
+
+    card.innerHTML = `
+        <div class="video-container">
+            <video class="work-video" src="${work.video}" preload="metadata" controls></video>
+        </div>
+        <div class="work-content">
+            <div class="work-meta">
+                <span class="work-date">${work.date}</span>
+                <span class="work-category">${work.category}</span>
+            </div>
+            <h3 class="work-title">${work.title}</h3>
+            <p class="work-excerpt">${work.excerpt}</p>
+            <div class="work-tech">
+                ${techTags}
+            </div>
+        </div>
+    `;
+
+    return card;
+}
+
+// 初始化作品展示
+function initializeWorks() {
+    const worksGrid = document.querySelector('.works-grid');
+    if (!worksGrid) return;
+
+    // 显示前4个作品
+    const initialWorks = worksDatabase.slice(0, 4);
+    initialWorks.forEach(work => {
+        const workCard = createWorkCard(work);
+        worksGrid.appendChild(workCard);
+        observer.observe(workCard);
+    });
+}
+
+// 作品加载更多功能
+const worksLoadMoreBtn = document.querySelector('.works .load-more .btn');
+let workCount = 4; // 初始显示的作品数量
+let worksPerLoad = 2; // 每次加载的作品数量
+let maxWorks = 12; // 最大显示作品数量
+
+if (worksLoadMoreBtn) {
+    worksLoadMoreBtn.addEventListener('click', function () {
+        this.innerHTML = '<span class="loading"></span> 加载中...';
+        this.disabled = true;
+
+        setTimeout(() => {
+            const worksGrid = document.querySelector('.works-grid');
+            const startIndex = workCount;
+            const endIndex = Math.min(startIndex + worksPerLoad, worksDatabase.length);
+
+            const newWorks = worksDatabase.slice(startIndex, endIndex);
+
+            newWorks.forEach(work => {
+                const workCard = createWorkCard(work);
+                worksGrid.appendChild(workCard);
+                observer.observe(workCard);
+            });
+
+            this.innerHTML = '加载更多作品';
+            this.disabled = false;
+
+            workCount += newWorks.length;
+
+            if (workCount >= maxWorks || workCount >= worksDatabase.length) {
+                this.innerHTML = '没有更多作品了';
                 this.disabled = true;
                 this.style.opacity = '0.5';
                 this.style.cursor = 'not-allowed';
