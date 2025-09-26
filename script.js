@@ -181,24 +181,24 @@ window.addEventListener('load', () => {
 // 作品数据库配置
 const worksDatabase = [
     {
-        title: 'Unity 3D游戏项目',
-        excerpt: '使用Unity引擎开发的3D冒险游戏，包含完整的角色控制和战斗系统。',
+        title: '王国之梦',
+        excerpt: '使用Unity引擎开发的2D类杀戮尖塔卡牌游戏',
         category: '游戏开发',
         date: '2024-01-20',
-        video: 'https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4',
-        tech: ['Unity', 'C#', '3D建模', '动画'],
-        description: '这是一个完整的3D冒险游戏项目，使用Unity引擎开发。游戏包含复杂的角色控制系统、实时战斗机制、任务系统和精美的3D场景。项目历时6个月完成，充分展示了Unity游戏开发的全流程。',
+        video: 'https://www.bilibili.com/video/BV1rDMgzqE5v/?spm_id_from=333.1387.homepage.video_card.click',
+        tech: ['Unity', 'C#', 'PS'],
+        description: '这是一个完整的2D卡牌游戏项目，使用Unity引擎开发。游戏包含的地图系统、卡牌对战系统、回合制系统,存储系统,充分展示了Unity游戏开发的全流程。',
         details: '项目包含5个关卡，20种敌人类型，完整的音效系统和UI界面。使用了Unity的PhysX物理引擎和Post-processing Stack来实现高质量的视觉效果。'
     },
     {
-        title: 'Web应用管理系统',
-        excerpt: '基于React和Node.js的现代化Web应用管理系统',
-        category: 'Web开发',
+        title: '胶囊大作战',
+        excerpt: '基于Unity3D的射击小游戏',
+        category: '游戏开发',
         date: '2024-01-15',
         video: 'video/胶囊大作战项目展示.mp4',
-        tech: ['React', 'Node.js', 'MongoDB', 'Express'],
-        description: '一个功能完善的Web应用管理系统，支持用户管理、数据分析和实时监控。采用前后端分离架构，具有良好的扩展性和维护性。',
-        details: '系统包含用户认证、权限管理、数据可视化、实时通知等功能。使用了JWT进行身份验证，Socket.io实现实时通信。'
+        tech: ['Unity', 'C#', 'PS', 'Blender'],
+        description: '一个功能完整的2.5D射击游戏,类吸血鬼幸存者玩法,玩家需要在平台内,击毙一定数量的敌人,进入下一关卡,在最后一关无尽模式中,取得更高的分数',
+        details: '系统包含种子化地图生成,Fisher-Yates算法实现敌人随机生成,完整的武器系统,基于对象池的子弹,特效,音频管理系统。'
     },
     {
         title: '移动端APP开发',
@@ -219,31 +219,43 @@ const worksDatabase = [
         tech: ['Python', 'TensorFlow', 'OpenCV', 'Docker'],
         description: '使用深度学习技术开发的图像识别系统，能够准确识别多种物体和场景。项目包含数据预处理、模型训练和部署等完整流程。',
         details: '系统准确率达到95%以上，支持实时图像识别和批量处理。使用了卷积神经网络(CNN)和数据增强技术。'
-    },
-    {
-        title: '区块链DApp项目',
-        excerpt: '去中心化应用(DApp)，基于以太坊平台',
-        category: '区块链',
-        date: '2023-12-28',
-        video: 'https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4',
-        tech: ['Solidity', 'Web3.js', 'React', 'IPFS'],
-        description: '基于以太坊区块链的去中心化应用，实现了智能合约和代币经济系统。项目展示了区块链技术的实际应用。',
-        details: 'DApp包含钱包连接、智能合约交互、去中心化存储等功能。使用了MetaMask进行用户认证，IPFS存储文件。'
-    },
-    {
-        title: 'VR虚拟现实项目',
-        excerpt: '沉浸式VR体验项目，支持多种VR设备',
-        category: 'VR/AR',
-        date: '2023-12-20',
-        video: 'https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4',
-        tech: ['Unity', 'C#', 'Oculus SDK', 'VRTK'],
-        description: '使用Unity开发的VR虚拟现实项目，提供沉浸式的虚拟体验。支持多种VR设备，具有直观的交互方式。',
-        details: '项目包含虚拟环境漫游、物体交互、手势识别等功能。优化了性能和用户体验，支持60fps的流畅运行。'
     }
 ];
 
 // 文章数据库配置
 const articlesDatabase = [
+    {
+        title: 'Unity对象池技术详解',
+        excerpt: '深入解析Unity对象池技术，包括基础实现、通用对象池、对象池管理器和最佳实践。',
+        category: 'Unity开发',
+        date: '2024-09-27',
+        gradient: 'gradient-1',
+        link: 'article/unity-object-pooling.html'
+    },
+    {
+        title: 'Unity存储系统设计与实现',
+        excerpt: '详细介绍Unity存储系统的架构设计，包括数据结构、JSON序列化、本地存储和云存储集成。',
+        category: 'Unity开发',
+        date: '2024-09-27',
+        gradient: 'gradient-2',
+        link: 'article/unity-storage-system.html'
+    },
+    {
+        title: 'Unity射线检测技术详解',
+        excerpt: '全面讲解Unity射线检测的原理、方法和应用场景，包括基础检测、特殊形状检测和性能优化。',
+        category: 'Unity开发',
+        date: '2024-09-27',
+        gradient: 'gradient-3',
+        link: 'article/unity-raycasting.html'
+    },
+    {
+        title: 'Unity物理引擎深度解析',
+        excerpt: '深入探讨Unity物理引擎的核心组件、刚体系统、碰撞体、关节系统和性能优化技术。',
+        category: 'Unity开发',
+        date: '2024-09-27',
+        gradient: 'gradient-4',
+        link: 'article/unity-physics-engine.html'
+    },
     {
         title: 'Web安全最佳实践',
         excerpt: '了解常见的Web安全威胁和防护措施，保护你的应用免受攻击。',
@@ -267,88 +279,7 @@ const articlesDatabase = [
         date: '2023-11-30',
         gradient: 'gradient-3',
         link: 'graphql-api.html'
-    },
-    {
-        title: 'Vue.js 3.0 新特性',
-        excerpt: '深入理解Vue.js 3.0的Composition API和其他新特性。',
-        category: '前端框架',
-        date: '2023-11-25',
-        gradient: 'gradient-4',
-        link: 'vuejs-3-features.html'
-    },
-    {
-        title: '微服务架构实践',
-        excerpt: '了解微服务架构的设计原则和最佳实践。',
-        category: '架构设计',
-        date: '2023-11-20',
-        gradient: 'gradient-5',
-        link: 'microservices-architecture.html'
-    },
-    {
-        title: 'Python数据分析',
-        excerpt: '使用Python进行数据分析，包括Pandas、NumPy等库的使用。',
-        category: '数据科学',
-        date: '2023-11-15',
-        gradient: 'gradient-6',
-        link: 'python-data-analysis.html'
-    },
-    {
-        title: '机器学习入门',
-        excerpt: '从零开始学习机器学习的基本概念和算法。',
-        category: '人工智能',
-        date: '2023-11-10',
-        gradient: 'gradient-1',
-        link: 'ml-introduction.html'
-    },
-    {
-        title: 'Kubernetes集群管理',
-        excerpt: '学习如何管理和部署Kubernetes集群。',
-        category: 'DevOps',
-        date: '2023-11-05',
-        gradient: 'gradient-2',
-        link: 'kubernetes-management.html'
-    },
-    {
-        title: '区块链技术解析',
-        excerpt: '深入了解区块链的核心技术和应用场景。',
-        category: '新兴技术',
-        date: '2023-10-30',
-        gradient: 'gradient-3',
-        link: 'blockchain-technology.html'
-    },
-    {
-        title: '测试网站1',
-        excerpt: '测试内容1',
-        category: '新兴技术',
-        date: '2099-10-30',
-        gradient: 'gradient-3',
-        link: 'article/text1.html'
-    },
-    {
-        title: '测试网站2',
-        excerpt: '测试内容2',
-        category: '新兴技术',
-        date: '2088-10-30',
-        gradient: 'gradient-3',
-        link: 'article/text2.html'
-    },
-    {
-        title: '测试网站3',
-        excerpt: '测试内容3',
-        category: '新兴技术',
-        date: '2077-10-30',
-        gradient: 'gradient-3',
-        link: 'article/text3.html'
-    },
-    {
-        title: '测试网站4',
-        excerpt: '测试内容4',
-        category: '新兴技术',
-        date: '2066-10-30',
-        gradient: 'gradient-3',
-        link: 'article/text4.html'
     }
-
 ];
 
 // Load more functionality
@@ -412,7 +343,18 @@ function createWorkCard(work) {
                 <span class="work-category">${work.category}</span>
             </div>
             <h3 class="work-title">${work.title}</h3>
-            <p class="work-excerpt">${work.excerpt}</p>
+
+            <!-- 默认显示的摘要 -->
+            <div class="work-excerpt-default">
+                <p class="work-excerpt">${work.excerpt}</p>
+            </div>
+
+            <!-- 悬停时显示的描述 -->
+            <div class="work-description-hover">
+                <p class="work-description">${work.description || '暂无描述'}</p>
+                <p class="work-details">${work.details || '暂无详细信息'}</p>
+            </div>
+
             <div class="work-tech">
                 ${techTags}
             </div>

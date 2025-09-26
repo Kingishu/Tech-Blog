@@ -1,0 +1,1479 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unity物理引擎深度解析 - Tech Blog</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-tomorrow.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-csharp.min.js"></script>
+    <style>
+        .article-header {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            padding: 100px 0 80px;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .article-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .article-header-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .article-header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .article-meta {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .article-content-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 60px;
+        }
+
+        .article-main {
+            min-width: 0;
+        }
+
+        .article-sidebar {
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+        }
+
+        .toc-container {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .toc-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .toc-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .toc-list li {
+            margin-bottom: 8px;
+        }
+
+        .toc-list a {
+            color: #666;
+            text-decoration: none;
+            padding: 5px 0;
+            display: block;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+            padding-left: 10px;
+        }
+
+        .toc-list a:hover {
+            color: #f093fb;
+            border-left-color: #f093fb;
+            padding-left: 15px;
+        }
+
+        .article-section {
+            margin-bottom: 50px;
+            scroll-margin-top: 100px;
+        }
+
+        .article-section h2 {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #333;
+            border-bottom: 3px solid #f093fb;
+            padding-bottom: 10px;
+        }
+
+        .article-section h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 30px 0 15px;
+            color: #444;
+        }
+
+        .article-section p {
+            line-height: 1.8;
+            margin-bottom: 15px;
+            color: #555;
+        }
+
+        .article-section ul, .article-section ol {
+            margin: 15px 0;
+            padding-left: 20px;
+        }
+
+        .article-section li {
+            margin-bottom: 8px;
+            line-height: 1.6;
+            color: #555;
+        }
+
+        .article-section pre {
+            background: #2d2d2d;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+            border: 1px solid #444;
+        }
+
+        .article-section code {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-left: 4px solid #f093fb;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .highlight-box h4 {
+            color: #f093fb;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .article-content-container {
+                grid-template-columns: 1fr;
+                gap: 40px;
+                padding: 40px 15px;
+            }
+
+            .article-header h1 {
+                font-size: 2.2rem;
+            }
+
+            .article-meta {
+                gap: 15px;
+                font-size: 1rem;
+            }
+
+            .article-sidebar {
+                position: static;
+            }
+
+            .toc-container {
+                order: -1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="nav">
+            <div class="nav-container">
+                <a href="../index.html" class="logo">
+                    <span class="logo-icon">◈</span>
+                    <span class="logo-text">Tech Blog</span>
+                </a>
+                <ul class="nav-menu">
+                    <li class="nav-item"><a href="../index.html#home" class="nav-link">首页</a></li>
+                    <li class="nav-item"><a href="../index.html#works" class="nav-link">作品</a></li>
+                    <li class="nav-item"><a href="../index.html#articles" class="nav-link">文章</a></li>
+                    <li class="nav-item"><a href="../index.html#about" class="nav-link">关于</a></li>
+                    <li class="nav-item"><a href="../index.html#contact" class="nav-link">联系</a></li>
+                </ul>
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <header class="article-header">
+        <div class="article-header-content">
+            <h1>Unity物理引擎深度解析</h1>
+            <div class="article-meta">
+                <span class="article-date">📅 2024-09-27</span>
+                <span class="article-category">🏷️ Unity开发</span>
+                <span class="article-reading-time">⏱️ 阅读时间: 25分钟</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="article-content-container">
+        <div class="article-main">
+            <article class="article-content">
+                <section id="introduction" class="article-section">
+                    <h2>引言</h2>
+                    <p>Unity物理引擎是游戏开发的核心系统之一，它基于NVIDIA PhysX技术，为游戏提供了真实的物理模拟。从简单的重力影响到复杂的车辆动力学，物理引擎让游戏世界更加生动和真实。</p>
+                    <p>本文将深入探讨Unity物理引擎的原理、组件系统、性能优化以及实际应用，帮助开发者掌握这一强大的技术。</p>
+                </section>
+
+                <section id="physics-basics" class="article-section">
+                    <h2>物理引擎基础</h2>
+                    <h3>物理系统架构</h3>
+                    <p>Unity物理系统包含以下核心组件：</p>
+                    <ul>
+                        <li><strong>Rigidbody</strong>：刚体组件，赋予物体物理属性</li>
+                        <li><strong>Collider</strong>：碰撞体，定义物体的物理形状</li>
+                        <li><strong>Physics Material</strong>：物理材质，控制摩擦力和弹性</li>
+                        <li><strong>Fixed Joint</strong>：固定关节，连接物体</li>
+                        <li><strong>Force</strong>：力系统，影响物体运动</li>
+                    </ul>
+
+                    <h3>物理更新循环</h3>
+                    <pre><code class="language-csharp">using UnityEngine;
+
+public class PhysicsUpdate : MonoBehaviour
+{
+    private void FixedUpdate()
+    {
+        // 物理计算在FixedUpdate中进行
+        // 每秒固定次数调用（默认50次）
+        Debug.Log("物理更新");
+    }
+
+    private void Update()
+    {
+        // 普通更新，每帧调用
+        // 不适合物理计算
+    }
+
+    private void LateUpdate()
+    {
+        // 在所有Update之后调用
+        // 适合相机跟随等操作
+    }
+}</code></pre>
+                </section>
+
+                <section id="rigidbody" class="article-section">
+                    <h2>刚体（Rigidbody）详解</h2>
+                    <h3>刚体基础属性</h3>
+                    <pre><code class="language-csharp">public class RigidbodyController : MonoBehaviour
+{
+    private Rigidbody rb;
+
+    private void Start()
+    {
+        rb = GetComponent&lt;Rigidbody&gt;();
+
+        // 设置刚体属性
+        rb.mass = 1f;                    // 质量
+        rb.drag = 0f;                    // 阻力
+        rb.angularDrag = 0.05f;          // 角阻力
+        rb.useGravity = true;            // 使用重力
+        rb.isKinematic = false;          // 是否受物理影响
+        rb.interpolation = RigidbodyInterpolation.Interpolate;  // 插值
+        rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;  // 碰撞检测模式
+    }
+
+    private void Update()
+    {
+        // 通过代码控制刚体
+        if (Input.GetKey(KeyCode.W))
+        {
+            rb.AddForce(transform.forward * 10f, ForceMode.Force);
+        }
+
+        if (Input.GetKey(KeyCode.S))
+        {
+            rb.AddForce(-transform.forward * 10f, ForceMode.Force);
+        }
+
+        if (Input.GetKey(KeyCode.A))
+        {
+            rb.AddTorque(transform.up * 5f, ForceMode.Force);
+        }
+
+        if (Input.GetKey(KeyCode.D))
+        {
+            rb.AddTorque(-transform.up * 5f, ForceMode.Force);
+        }
+    }
+
+    // 物理相关方法
+    private void FixedUpdate()
+    {
+        // 在FixedUpdate中修改物理属性
+        if (Input.GetKey(KeyCode.Space))
+        {
+            rb.AddForce(Vector3.up * 300f, ForceMode.Impulse);
+        }
+    }
+}</code></pre>
+
+                    <h3>力的类型和应用</h3>
+                    <pre><code class="language-csharp">public class ForceSystem : MonoBehaviour
+{
+    private Rigidbody rb;
+
+    private void Start()
+    {
+        rb = GetComponent&lt;Rigidbody&gt;();
+    }
+
+    private void FixedUpdate()
+    {
+        // 1. ForceMode.Force - 持续力
+        if (Input.GetKey(KeyCode.F))
+        {
+            // 添加力，考虑质量
+            rb.AddForce(transform.forward * 100f, ForceMode.Force);
+        }
+
+        // 2. ForceMode.Impulse - 冲量
+        if (Input.GetKeyDown(KeyCode.J))
+        {
+            // 添加瞬时力，不考虑质量
+            rb.AddForce(transform.up * 500f, ForceMode.Impulse);
+        }
+
+        // 3. ForceMode.VelocityChange - 速度改变
+        if (Input.GetKeyDown(KeyCode.V))
+        {
+            // 直接改变速度，不考虑质量
+            rb.AddForce(transform.forward * 10f, ForceMode.VelocityChange);
+        }
+
+        // 4. ForceMode.Acceleration - 加速度
+        if (Input.GetKey(KeyCode.A))
+        {
+            // 添加加速度，不考虑质量
+            rb.AddForce(transform.up * 5f, ForceMode.Acceleration);
+        }
+
+        // 相对力
+        if (Input.GetKey(KeyCode.R))
+        {
+            // 相对于物体自身坐标系的力
+            rb.AddRelativeForce(Vector3.forward * 50f, ForceMode.Force);
+        }
+
+        // 扭矩
+        if (Input.GetKey(KeyCode.Q))
+        {
+            rb.AddTorque(Vector3.up * 20f, ForceMode.Force);
+        }
+
+        // 相对扭矩
+        if (Input.GetKey(KeyCode.E))
+        {
+            rb.AddRelativeTorque(Vector3.right * 10f, ForceMode.Force);
+        }
+    }
+}</code></pre>
+                </section>
+
+                <section id="colliders" class="article-section">
+                    <h2>碰撞体（Collider）系统</h2>
+                    <h3>碰撞体类型</h3>
+                    <pre><code class="language-csharp">public class ColliderManager : MonoBehaviour
+{
+    public enum ColliderType
+    {
+        Box,
+        Sphere,
+        Capsule,
+        Mesh,
+        Wheel
+    }
+
+    public ColliderType type = ColliderType.Box;
+
+    private void Start()
+    {
+        SetupCollider();
+    }
+
+    private void SetupCollider()
+    {
+        // 移除现有碰撞体
+        Collider[] existingColliders = GetComponents&lt;Collider&gt;();
+        foreach (Collider collider in existingColliders)
+        {
+            Destroy(collider);
+        }
+
+        // 添加新的碰撞体
+        switch (type)
+        {
+            case ColliderType.Box:
+                BoxCollider boxCollider = gameObject.AddComponent&lt;BoxCollider&gt;();
+                boxCollider.size = Vector3.one;
+                boxCollider.center = Vector3.zero;
+                boxCollider.isTrigger = false;
+                break;
+
+            case ColliderType.Sphere:
+                SphereCollider sphereCollider = gameObject.AddComponent&lt;SphereCollider&gt;();
+                sphereCollider.radius = 0.5f;
+                sphereCollider.center = Vector3.zero;
+                sphereCollider.isTrigger = false;
+                break;
+
+            case ColliderType.Capsule:
+                CapsuleCollider capsuleCollider = gameObject.AddComponent&lt;CapsuleCollider&gt;();
+                capsuleCollider.radius = 0.5f;
+                capsuleCollider.height = 2f;
+                capsuleCollider.center = Vector3.zero;
+                capsuleCollider.direction = 1; // Y轴方向
+                capsuleCollider.isTrigger = false;
+                break;
+
+            case ColliderType.Mesh:
+                MeshCollider meshCollider = gameObject.AddComponent&lt;MeshCollider&gt;();
+                MeshFilter meshFilter = GetComponent&lt;MeshFilter&gt;();
+                if (meshFilter != null)
+                {
+                    meshCollider.sharedMesh = meshFilter.sharedMesh;
+                }
+                meshCollider.convex = false;
+                meshCollider.isTrigger = false;
+                break;
+
+            case ColliderType.Wheel:
+                WheelCollider wheelCollider = gameObject.AddComponent&lt;WheelCollider&gt;();
+                wheelCollider.radius = 0.5f;
+                wheelCollider.suspensionDistance = 0.2f;
+                wheelCollider.center = Vector3.zero;
+                break;
+        }
+    }
+}</code></pre>
+
+                    <h3>碰撞事件处理</h3>
+                    <pre><code class="language-csharp">public class CollisionEvents : MonoBehaviour
+{
+    private Rigidbody rb;
+
+    private void Start()
+    {
+        rb = GetComponent&lt;Rigidbody&gt;();
+    }
+
+    // 碰撞开始
+    private void OnCollisionEnter(Collision collision)
+    {
+        Debug.Log($"碰撞开始: {collision.gameObject.name}");
+        Debug.Log($"碰撞点: {collision.contacts[0].point}");
+        Debug.Log($"碰撞法线: {collision.contacts[0].normal}");
+        Debug.Log($"相对速度: {collision.relativeVelocity}");
+
+        // 根据碰撞力产生效果
+        if (collision.relativeVelocity.magnitude > 5f)
+        {
+            // 创建撞击特效
+            CreateImpactEffect(collision.contacts[0].point);
+        }
+
+        // 播放撞击音效
+        if (collision.relativeVelocity.magnitude > 2f)
+        {
+            PlayImpactSound(collision.relativeVelocity.magnitude);
+        }
+    }
+
+    // 碰撞持续
+    private void OnCollisionStay(Collision collision)
+    {
+        // 可以在这里处理持续碰撞的效果
+        // 比如：在地面上的摩擦力
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            ApplyGroundFriction(collision);
+        }
+    }
+
+    // 碰撞结束
+    private void OnCollisionExit(Collision collision)
+    {
+        Debug.Log($"碰撞结束: {collision.gameObject.name}");
+    }
+
+    // 触发器事件
+    private void OnTriggerEnter(Collider other)
+    {
+        Debug.Log($"进入触发器: {other.name}");
+
+        if (other.CompareTag("Pickup"))
+        {
+            CollectItem(other);
+        }
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        // 持续在触发器内
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        Debug.Log($"离开触发器: {other.name}");
+    }
+
+    private void CreateImpactEffect(Vector3 position)
+    {
+        // 创建撞击特效
+        GameObject effect = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        effect.transform.position = position;
+        effect.transform.localScale = Vector3.one * 0.2f;
+        Destroy(effect, 1f);
+    }
+
+    private void PlayImpactSound(float velocity)
+    {
+        // 根据速度播放不同的撞击音效
+        Debug.Log($"播放撞击音效，速度: {velocity}");
+    }
+
+    private void CollectItem(Collider item)
+    {
+        // 收集物品
+        Destroy(item.gameObject);
+    }
+
+    private void ApplyGroundFriction(Collision collision)
+    {
+        // 应用地面摩擦力
+        if (rb != null)
+        {
+            Vector3 frictionForce = -rb.velocity * 0.1f;
+            rb.AddForce(frictionForce, ForceMode.Force);
+        }
+    }
+}</code></pre>
+                </section>
+
+                <section id="physics-materials" class="article-section">
+                    <h2>物理材质（Physics Material）</h2>
+                    <pre><code class="language-csharp">using UnityEngine;
+
+// 物理材质管理器
+public class PhysicsMaterialManager : MonoBehaviour
+{
+    [Header("材质属性")]
+    public float dynamicFriction = 0.6f;
+    public float staticFriction = 0.6f;
+    public float bounciness = 0.3f;
+    public PhysicMaterialCombine frictionCombine = PhysicMaterialCombine.Average;
+    public PhysicMaterialCombine bounceCombine = PhysicMaterialCombine.Average;
+
+    private void Start()
+    {
+        CreateAndApplyPhysicsMaterial();
+    }
+
+    private void CreateAndApplyPhysicsMaterial()
+    {
+        // 创建物理材质
+        PhysicMaterial material = new PhysicMaterial();
+
+        // 设置材质属性
+        material.dynamicFriction = dynamicFriction;      // 动摩擦力
+        material.staticFriction = staticFriction;        // 静摩擦力
+        material.bounciness = bounciness;                // 弹性系数
+        material.frictionCombine = frictionCombine;      // 摩擦力组合方式
+        material.bounceCombine = bounceCombine;          // 弹性组合方式
+
+        // 应用到碰撞体
+        Collider collider = GetComponent&lt;Collider&gt;();
+        if (collider != null)
+        {
+            collider.material = material;
+        }
+
+        // 保存材质资源
+        #if UNITY_EDITOR
+        UnityEditor.AssetDatabase.CreateAsset(material, "Assets/Materials/CustomPhysicsMaterial.physicMaterial");
+        #endif
+    }
+}
+
+// 不同表面的物理材质
+public class SurfacePhysics : MonoBehaviour
+{
+    public enum SurfaceType
+    {
+        Ice,        // 冰面
+        Rubber,     // 橡胶
+        Metal,      // 金属
+        Wood,       // 木材
+        Grass       // 草地
+    }
+
+    public SurfaceType surfaceType;
+
+    private PhysicMaterial GetMaterialForSurface(SurfaceType type)
+    {
+        PhysicMaterial material = new PhysicMaterial();
+
+        switch (type)
+        {
+            case SurfaceType.Ice:
+                material.dynamicFriction = 0.1f;
+                material.staticFriction = 0.1f;
+                material.bounciness = 0.2f;
+                material.name = "Ice";
+                break;
+
+            case SurfaceType.Rubber:
+                material.dynamicFriction = 0.8f;
+                material.staticFriction = 0.9f;
+                material.bounciness = 0.7f;
+                material.name = "Rubber";
+                break;
+
+            case SurfaceType.Metal:
+                material.dynamicFriction = 0.3f;
+                material.staticFriction = 0.4f;
+                material.bounciness = 0.5f;
+                material.name = "Metal";
+                break;
+
+            case SurfaceType.Wood:
+                material.dynamicFriction = 0.5f;
+                material.staticFriction = 0.6f;
+                material.bounciness = 0.3f;
+                material.name = "Wood";
+                break;
+
+            case SurfaceType.Grass:
+                material.dynamicFriction = 0.7f;
+                material.staticFriction = 0.8f;
+                material.bounciness = 0.1f;
+                material.name = "Grass";
+                break;
+        }
+
+        return material;
+    }
+}</code></pre>
+                </section>
+
+                <section id="joints" class="article-section">
+                    <h2>关节系统（Joints）</h2>
+                    <h3>固定关节（Fixed Joint）</h3>
+                    <pre><code class="language-csharp">public class JointSystem : MonoBehaviour
+{
+    [Header("关节设置")]
+    public GameObject connectedObject;
+    public float breakForce = Mathf.Infinity;
+    public float breakTorque = Mathf.Infinity;
+
+    private void Start()
+    {
+        SetupFixedJoint();
+    }
+
+    private void SetupFixedJoint()
+    {
+        if (connectedObject != null)
+        {
+            FixedJoint joint = gameObject.AddComponent&lt;FixedJoint&gt;();
+            joint.connectedBody = connectedObject.GetComponent&lt;Rigidbody&gt;();
+            joint.breakForce = breakForce;
+            joint.breakTorque = breakTorque;
+            joint.enableCollision = false;
+            joint.enablePreprocessing = true;
+        }
+    }
+
+    // 关节断裂事件
+    private void OnJointBreak(float breakForce)
+    {
+        Debug.Log($"关节断裂，断裂力: {breakForce}");
+        OnJointBroken();
+    }
+
+    private void OnJointBroken()
+    {
+        // 处理关节断裂后的逻辑
+        // 比如：播放断裂音效、创建粒子效果等
+    }
+}</code></pre>
+
+                    <h3>弹簧关节（Spring Joint）</h3>
+                    <pre><code class="language-csharp">public class SpringJointSystem : MonoBehaviour
+{
+    [Header("弹簧设置")]
+    public GameObject connectedObject;
+    public float spring = 50f;
+    public float damper = 5f;
+    public float minDistance = 0.1f;
+    public float maxDistance = 0.5f;
+    public float tolerance = 0.025f;
+
+    private void Start()
+    {
+        SetupSpringJoint();
+    }
+
+    private void SetupSpringJoint()
+    {
+        if (connectedObject != null)
+        {
+            SpringJoint joint = gameObject.AddComponent&lt;SpringJoint&gt;();
+            joint.connectedBody = connectedObject.GetComponent&lt;Rigidbody&gt;();
+            joint.spring = spring;
+            joint.damper = damper;
+            joint.minDistance = minDistance;
+            joint.maxDistance = maxDistance;
+            joint.tolerance = tolerance;
+            joint.enableCollision = false;
+        }
+    }
+}</code></pre>
+
+                    <h3>铰链关节（Hinge Joint）</h3>
+                    <pre><code class="language-csharp">public class HingeJointSystem : MonoBehaviour
+{
+    [Header("铰链设置")]
+    public GameObject connectedObject;
+    public Vector3 axis = Vector3.right;
+    public bool useSpring = false;
+    public float springValue = 50f;
+    public float damperValue = 5f;
+    public bool useMotor = false;
+    public float motorForce = 100f;
+    public float motorSpeed = 100f;
+    public bool useLimits = false;
+    public float minAngle = -45f;
+    public float maxAngle = 45f;
+
+    private void Start()
+    {
+        SetupHingeJoint();
+    }
+
+    private void SetupHingeJoint()
+    {
+        if (connectedObject != null)
+        {
+            HingeJoint joint = gameObject.AddComponent&lt;HingeJoint&gt;();
+            joint.connectedBody = connectedObject.GetComponent&lt;Rigidbody&gt;();
+            joint.axis = axis;
+
+            // 弹簧设置
+            if (useSpring)
+            {
+                JointSpring spring = new JointSpring();
+                spring.spring = springValue;
+                spring.damper = damperValue;
+                spring.targetPosition = 0f;
+                joint.spring = spring;
+                joint.useSpring = true;
+            }
+
+            // 电机设置
+            if (useMotor)
+            {
+                JointMotor motor = new JointMotor();
+                motor.force = motorForce;
+                motor.targetVelocity = motorSpeed;
+                motor.freeSpin = false;
+                joint.motor = motor;
+                joint.useMotor = true;
+            }
+
+            // 限制设置
+            if (useLimits)
+            {
+                JointLimits limits = new JointLimits();
+                limits.min = minAngle;
+                limits.max = maxAngle;
+                limits.bounciness = 0f;
+                limits.bounceMinVelocity = 0f;
+                limits.contactDistance = 0f;
+                joint.limits = limits;
+                joint.useLimits = true;
+            }
+        }
+    }
+}</code></pre>
+                </section>
+
+                <section id="optimization" class="article-section">
+                    <h2>物理性能优化</h2>
+                    <h3>1. 碰撞优化</h3>
+                    <pre><code class="language-csharp">public class PhysicsOptimizer : MonoBehaviour
+{
+    [Header("优化设置")]
+    public LayerMask collisionLayers;
+    public float optimizationInterval = 0.5f;
+    public int maxCollisionPairs = 100;
+
+    private float nextOptimizationTime;
+
+    private void Start()
+    {
+        ConfigurePhysicsSettings();
+    }
+
+    private void ConfigurePhysicsSettings()
+    {
+        // 设置物理时间步长
+        Time.fixedDeltaTime = 0.02f; // 50 FPS
+
+        // 设置最大迭代次数
+        Physics.defaultSolverIterations = 6;
+        Physics.defaultSolverVelocityIterations = 1;
+
+        // 设置重力
+        Physics.gravity = new Vector3(0, -9.81f, 0);
+
+        // 设置睡眠阈值
+        Physics.sleepThreshold = 0.005f;
+        Physics.defaultContactOffset = 0.01f;
+    }
+
+    private void Update()
+    {
+        if (Time.time >= nextOptimizationTime)
+        {
+            OptimizePhysics();
+            nextOptimizationTime = Time.time + optimizationInterval;
+        }
+    }
+
+    private void OptimizePhysics()
+    {
+        // 优化碰撞矩阵
+        OptimizeCollisionMatrix();
+
+        // 休眠不活动的物体
+        SleepInactiveObjects();
+
+        // 清理无效的碰撞对
+        CleanInvalidCollisions();
+    }
+
+    private void OptimizeCollisionMatrix()
+    {
+        // 设置哪些层级之间进行碰撞检测
+        Physics.IgnoreLayerCollision(0, 8, false);  // Default与Player层
+        Physics.IgnoreLayerCollision(8, 9, true);   // Player与Enemy层
+        Physics.IgnoreLayerCollision(9, 10, false); // Enemy与Bullet层
+    }
+
+    private void SleepInactiveObjects()
+    {
+        // 寻找不活动的物体并让其休眠
+        Rigidbody[] allRigidbodies = FindObjectsOfType&lt;Rigidbody&gt;();
+
+        foreach (Rigidbody rb in allRigidbodies)
+        {
+            if (rb.IsSleeping())
+            {
+                // 物体已经在休眠状态
+                continue;
+            }
+
+            // 检查物体是否应该休眠
+            if (ShouldSleep(rb))
+            {
+                rb.Sleep();
+            }
+        }
+    }
+
+    private bool ShouldSleep(Rigidbody rb)
+    {
+        // 速度很小的物体应该休眠
+        if (rb.velocity.magnitude < 0.1f && rb.angularVelocity.magnitude < 0.1f)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    private void CleanInvalidCollisions()
+    {
+        // 清理无效的碰撞对（需要在实际项目中实现）
+        // 这里只是示例框架
+    }
+}</code></pre>
+
+                    <h3>2. 物理预算管理</h3>
+                    <pre><code class="language-csharp">public class PhysicsBudgetManager : MonoBehaviour
+{
+    [Header("物理预算设置")]
+    public float maxPhysicsTimePerFrame = 0.003f; // 3ms
+    public int maxRigidbodyCount = 500;
+    public int maxColliderCount = 1000;
+
+    private float physicsTimeThisFrame;
+
+    private void FixedUpdate()
+    {
+        float startTime = Time.realtimeSinceStartup;
+
+        // 执行物理计算
+        PerformPhysicsCalculations();
+
+        physicsTimeThisFrame = Time.realtimeSinceStartup - startTime;
+
+        // 如果超出预算，降低物理质量
+        if (physicsTimeThisFrame > maxPhysicsTimePerFrame)
+        {
+            ReducePhysicsQuality();
+        }
+    }
+
+    private void PerformPhysicsCalculations()
+    {
+        // 在这里执行自定义的物理计算
+        // 确保不会超出时间预算
+    }
+
+    private void ReducePhysicsQuality()
+    {
+        // 降低物理质量的方法
+        Physics.defaultSolverIterations = Mathf.Max(3, Physics.defaultSolverIterations - 1);
+
+        // 减少不重要的物体的物理更新频率
+        ReduceNonCriticalPhysicsUpdates();
+    }
+
+    private void ReduceNonCriticalPhysicsUpdates()
+    {
+        // 找到非关键的物理对象并降低其更新频率
+        Rigidbody[] rigidbodies = FindObjectsOfType&lt;Rigidbody&gt;();
+
+        foreach (Rigidbody rb in rigidbodies)
+        {
+            if (IsNonCriticalObject(rb))
+            {
+                // 降低插值质量
+                if (rb.interpolation == RigidbodyInterpolation.Interpolate)
+                {
+                    rb.interpolation = RigidbodyInterpolation.None;
+                }
+            }
+        }
+    }
+
+    private bool IsNonCriticalObject(Rigidbody rb)
+    {
+        // 判断是否为非关键对象
+        // 比如：远处的物体、装饰性物体等
+        return rb.CompareTag("Decoration") || rb.CompareTag("Environment");
+    }
+}</code></pre>
+                </section>
+
+                <section id="applications" class="article-section">
+                    <h2>实际应用案例</h2>
+                    <h3>1. 车辆物理系统</h3>
+                    <pre><code class="language-csharp">public class VehiclePhysics : MonoBehaviour
+{
+    [Header("车辆设置")]
+    public float maxSpeed = 20f;
+    public float acceleration = 10f;
+    public float brakeForce = 50f;
+    public float turnSpeed = 100f;
+    public float maxSteerAngle = 30f;
+
+    [Header("车轮设置")]
+    public WheelCollider frontLeftWheel;
+    public WheelCollider frontRightWheel;
+    public WheelCollider rearLeftWheel;
+    public WheelCollider rearRightWheel;
+
+    [Header("视觉车轮")]
+    public Transform frontLeftWheelTransform;
+    public Transform frontRightWheelTransform;
+    public Transform rearLeftWheelTransform;
+    public Transform rearRightWheelTransform;
+
+    private float motorInput;
+    private float steerInput;
+
+    private void Start()
+    {
+        SetupWheels();
+    }
+
+    private void SetupWheels()
+    {
+        WheelCollider[] wheels = { frontLeftWheel, frontRightWheel, rearLeftWheel, rearRightWheel };
+
+        foreach (WheelCollider wheel in wheels)
+        {
+            wheel.suspensionDistance = 0.2f;
+            JointSpring suspension = wheel.suspensionSpring;
+            suspension.spring = 35000f;
+            suspension.damper = 4500f;
+            suspension.targetPosition = 0.5f;
+            wheel.suspensionSpring = suspension;
+
+            wheel.radius = 0.3f;
+            wheel.mass = 20f;
+            wheel.wheelDampingRate = 0.25f;
+        }
+    }
+
+    private void Update()
+    {
+        GetInput();
+        UpdateWheelPositions();
+    }
+
+    private void FixedUpdate()
+    {
+        HandleMotor();
+        HandleSteering();
+    }
+
+    private void GetInput()
+    {
+        motorInput = Input.GetAxis("Vertical");
+        steerInput = Input.GetAxis("Horizontal");
+    }
+
+    private void HandleMotor()
+    {
+        // 前轮驱动
+        frontLeftWheel.motorTorque = motorInput * acceleration;
+        frontRightWheel.motorTorque = motorInput * acceleration;
+
+        // 刹车
+        if (Input.GetKey(KeyCode.Space))
+        {
+            frontLeftWheel.brakeTorque = brakeForce;
+            frontRightWheel.brakeTorque = brakeForce;
+            rearLeftWheel.brakeTorque = brakeForce;
+            rearRightWheel.brakeTorque = brakeForce;
+        }
+        else
+        {
+            frontLeftWheel.brakeTorque = 0f;
+            frontRightWheel.brakeTorque = 0f;
+            rearLeftWheel.brakeTorque = 0f;
+            rearRightWheel.brakeTorque = 0f;
+        }
+    }
+
+    private void HandleSteering()
+    {
+        float steerAngle = steerInput * maxSteerAngle;
+        frontLeftWheel.steerAngle = steerAngle;
+        frontRightWheel.steerAngle = steerAngle;
+    }
+
+    private void UpdateWheelPositions()
+    {
+        UpdateWheelPosition(frontLeftWheel, frontLeftWheelTransform);
+        UpdateWheelPosition(frontRightWheel, frontRightWheelTransform);
+        UpdateWheelPosition(rearLeftWheel, rearLeftWheelTransform);
+        UpdateWheelPosition(rearRightWheel, rearRightWheelTransform);
+    }
+
+    private void UpdateWheelPosition(WheelCollider wheel, Transform wheelTransform)
+    {
+        Vector3 position;
+        Quaternion rotation;
+        wheel.GetWorldPose(out position, out rotation);
+
+        wheelTransform.position = position;
+        wheelTransform.rotation = rotation;
+    }
+}</code></pre>
+
+                    <h3>2. 角色控制器</h3>
+                    <pre><code class="language-csharp">public class CharacterController : MonoBehaviour
+{
+    [Header("移动设置")]
+    public float moveSpeed = 5f;
+    public float jumpForce = 10f;
+    public float groundCheckDistance = 0.1f;
+    public float slopeLimit = 45f;
+
+    [Header("物理设置")]
+    public LayerMask groundLayers;
+    public float airControl = 0.3f;
+
+    private Rigidbody rb;
+    private bool isGrounded;
+    private Vector3 moveDirection;
+    private float slopeAngle;
+
+    private void Start()
+    {
+        rb = GetComponent&lt;Rigidbody&gt;();
+        SetupRigidbody();
+    }
+
+    private void SetupRigidbody()
+    {
+        rb.interpolation = RigidbodyInterpolation.Interpolate;
+        rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+        rb.freezeRotation = true;
+    }
+
+    private void Update()
+    {
+        HandleInput();
+        CheckGrounded();
+    }
+
+    private void FixedUpdate()
+    {
+        HandleMovement();
+    }
+
+    private void HandleInput()
+    {
+        float horizontal = Input.GetAxis("Horizontal");
+        float vertical = Input.GetAxis("Vertical");
+
+        moveDirection = new Vector3(horizontal, 0f, vertical).normalized;
+        moveDirection = transform.TransformDirection(moveDirection);
+
+        if (Input.GetButtonDown("Jump") && isGrounded)
+        {
+            Jump();
+        }
+    }
+
+    private void CheckGrounded()
+    {
+        RaycastHit hit;
+        Vector3 rayStart = transform.position + Vector3.up * 0.1f;
+
+        if (Physics.Raycast(rayStart, Vector3.down, out hit, groundCheckDistance, groundLayers))
+        {
+            isGrounded = true;
+
+            // 计算坡度
+            slopeAngle = Vector3.Angle(hit.normal, Vector3.up);
+        }
+        else
+        {
+            isGrounded = false;
+            slopeAngle = 0f;
+        }
+    }
+
+    private void HandleMovement()
+    {
+        if (isGrounded)
+        {
+            // 地面移动
+            if (slopeAngle <= slopeLimit)
+            {
+                Vector3 targetVelocity = moveDirection * moveSpeed;
+                Vector3 velocity = rb.velocity;
+                Vector3 velocityChange = targetVelocity - velocity;
+                velocityChange.y = 0f;
+
+                rb.AddForce(velocityChange, ForceMode.VelocityChange);
+            }
+        }
+        else
+        {
+            // 空中控制
+            Vector3 airMove = moveDirection * moveSpeed * airControl;
+            rb.AddForce(airMove, ForceMode.Acceleration);
+        }
+    }
+
+    private void Jump()
+    {
+        rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+    }
+
+    private void OnDrawGizmos()
+    {
+        // 绘制地面检测射线
+        Gizmos.color = isGrounded ? Color.green : Color.red;
+        Gizmos.DrawRay(transform.position + Vector3.up * 0.1f, Vector3.down * groundCheckDistance);
+    }
+}</code></pre>
+                </section>
+
+                <section id="debugging" class="article-section">
+                    <h2>物理调试和监控</h2>
+                    <h3>1. 物理调试工具</h3>
+                    <pre><code class="language-csharp">public class PhysicsDebugger : MonoBehaviour
+{
+    [Header("调试设置")]
+    public bool showVelocity = true;
+    public bool showForces = true;
+    public bool showCollisions = true;
+    public bool showRaycasts = true;
+    public float arrowScale = 0.1f;
+
+    private Dictionary&lt;Rigidbody, Vector3&gt; lastPositions = new Dictionary&lt;Rigidbody, Vector3&gt;();
+
+    private void Update()
+    {
+        UpdateDebugInfo();
+    }
+
+    private void UpdateDebugInfo()
+    {
+        Rigidbody[] rigidbodies = FindObjectsOfType&lt;Rigidbody&gt;();
+
+        foreach (Rigidbody rb in rigidbodies)
+        {
+            if (showVelocity)
+            {
+                DrawVelocityArrow(rb);
+            }
+
+            if (showForces)
+            {
+                DrawForceIndicators(rb);
+            }
+        }
+    }
+
+    private void DrawVelocityArrow(Rigidbody rb)
+    {
+        if (rb.velocity.magnitude > 0.01f)
+        {
+            Debug.DrawRay(rb.position, rb.velocity * arrowScale, Color.blue);
+        }
+    }
+
+    private void DrawForceIndicators(Rigidbody rb)
+    {
+        // 显示当前作用力
+        // 注意：Unity不直接提供获取当前作用力的方法
+        // 这里只是示例
+        Debug.DrawRay(rb.position, Vector3.up * rb.mass * Physics.gravity.magnitude * arrowScale, Color.red);
+    }
+
+    // 碰撞可视化
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (showCollisions)
+        {
+            foreach (ContactPoint contact in collision.contacts)
+            {
+                Debug.DrawRay(contact.point, contact.normal * 0.5f, Color.yellow, 2f);
+                Debug.Log($"碰撞: {contact.thisCollider.name} -> {contact.otherCollider.name}");
+            }
+        }
+    }
+
+    // 物理性能监控
+    private void OnGUI()
+    {
+        GUILayout.BeginArea(new Rect(10, 10, 300, 200));
+        GUILayout.Label("物理系统监控");
+        GUILayout.Label($"物理时间: {physicsTimeThisFrame * 1000f:F2}ms");
+        GUILayout.Label($"刚体数量: {FindObjectsOfType&lt;Rigidbody&gt;().Length}");
+        GUILayout.Label($"碰撞体数量: {FindObjectsOfType&lt;Collider&gt;().Length}");
+        GUILayout.Label($"物理迭代: {Physics.defaultSolverIterations}");
+        GUILayout.EndArea();
+    }
+
+    private float physicsTimeThisFrame;
+
+    private void FixedUpdate()
+    {
+        physicsTimeThisFrame = Time.fixedDeltaTime;
+    }
+}</code></pre>
+                </section>
+
+                <section id="best-practices" class="article-section">
+                    <h2>最佳实践和常见问题</h2>
+                    <h3>最佳实践</h3>
+                    <ul>
+                        <li><strong>使用FixedUpdate</strong>：所有物理计算应在FixedUpdate中进行</li>
+                        <li><strong>避免直接修改Transform</strong>：使用AddForce而不是直接改变位置</li>
+                        <li><strong>合理设置质量</strong>：质量比例比绝对值更重要</li>
+                        <li><strong>使用层级过滤</strong>：减少不必要的碰撞检测</li>
+                        <li><strong>注意插值设置</strong>：对于移动物体使用插值</li>
+                    </ul>
+
+                    <h3>常见问题解决方案</h3>
+                    <h4>问题1：物体重叠穿透</h4>
+                    <p><strong>解决方案</strong>：</p>
+                    <ul>
+                        <li>使用Continuous碰撞检测模式</li>
+                        <li>增加时间步长精度</li>
+                        <li>合理设置碰撞体大小</li>
+                    </ul>
+
+                    <h4>问题2：物理抖动</h4>
+                    <p><strong>解决方案</strong>：</p>
+                    <ul>
+                        <li>调整阻尼值</li>
+                        <li>使用插值</li>
+                        <li>检查约束设置</li>
+                    </ul>
+
+                    <h4>问题3：性能问题</h4>
+                    <p><strong>解决方案</strong>：</p>
+                    <ul>
+                        <li>简化碰撞体</li>
+                        <li>使用物理预算</li>
+                        <li>优化碰撞矩阵</li>
+                    </ul>
+                </section>
+
+                <section id="conclusion" class="article-section">
+                    <h2>总结</h2>
+                    <p>Unity物理引擎是一个强大而复杂的系统，掌握其原理和最佳实践对于创建真实、流畅的游戏体验至关重要。</p>
+                    <p>关键要点：</p>
+                    <ul>
+                        <li>理解物理更新循环和组件系统</li>
+                        <li>合理使用刚体、碰撞体和物理材质</li>
+                        <li>掌握各种力的类型和应用</li>
+                        <li>注重性能优化和调试</li>
+                        <li>结合实际应用场景选择合适的物理方案</li>
+                    </ul>
+
+                    <div class="highlight-box">
+                        <h4>🎯 核心要点</h4>
+                        <p>通过深入学习和实践，你将能够充分利用Unity物理引擎，创造出令人惊叹的物理效果和游戏体验。记住，物理系统的性能优化是开发高质量游戏的关键。</p>
+                    </div>
+                </section>
+            </article>
+
+            <div class="article-navigation">
+                <a href="../index.html#articles" class="nav-link">← 返回文章列表</a>
+            </div>
+        </div>
+
+        <aside class="article-sidebar">
+            <div class="toc-container">
+                <h3 class="toc-title">📋 目录</h3>
+                <nav class="toc-list">
+                    <ul>
+                        <li><a href="#introduction">引言</a></li>
+                        <li><a href="#physics-basics">物理引擎基础</a></li>
+                        <li><a href="#rigidbody">刚体详解</a></li>
+                        <li><a href="#colliders">碰撞体系统</a></li>
+                        <li><a href="#physics-materials">物理材质</a></li>
+                        <li><a href="#joints">关节系统</a></li>
+                        <li><a href="#optimization">性能优化</a></li>
+                        <li><a href="#applications">实际应用案例</a></li>
+                        <li><a href="#debugging">调试和监控</a></li>
+                        <li><a href="#best-practices">最佳实践</a></li>
+                        <li><a href="#conclusion">总结</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </aside>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Tech Blog</h3>
+                    <p>分享技术，传播知识</p>
+                </div>
+                <div class="footer-section">
+                    <h4>快速链接</h4>
+                    <ul class="footer-links">
+                        <li><a href="../index.html#home">首页</a></li>
+                        <li><a href="../index.html#works">作品</a></li>
+                        <li><a href="../index.html#articles">文章</a></li>
+                        <li><a href="../index.html#about">关于</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>技术栈</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Unity</a></li>
+                        <li><a href="#">C#</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Tech Blog. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../script.js"></script>
+    <script>
+        // Smooth scrolling for TOC links
+        document.querySelectorAll('.toc-list a').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Highlight active section in TOC
+        const sections = document.querySelectorAll('.article-section');
+        const tocLinks = document.querySelectorAll('.toc-list a');
+
+        const observerOptions = {
+            root: null,
+            rootMargin: '-20% 0px -70% 0px',
+            threshold: 0
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const id = entry.target.getAttribute('id');
+                    tocLinks.forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === `#${id}`) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
+            });
+        }, observerOptions);
+
+        sections.forEach(section => {
+            observer.observe(section);
+        });
+    </script>
+</body>
+</html>

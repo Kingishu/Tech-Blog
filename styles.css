@@ -358,6 +358,87 @@ body {
     filter: none !important;
 }
 
+/* 卡片内容切换动画 */
+.work-content {
+    transition: var(--transition);
+}
+
+.work-title, .work-excerpt, .work-details, .work-description {
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.work-excerpt-default, .work-details-hover, .work-description-hover {
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.work-meta, .work-tech {
+    transition: opacity 0.3s ease, transform 0.3s ease, margin 0.3s ease;
+}
+
+.work-details-hover, .work-description-hover {
+    opacity: 0;
+    transform: translateY(10px);
+    position: absolute;
+    width: calc(100% - 3rem);
+    left: 1.5rem;
+}
+
+.work-card:hover .work-excerpt-default {
+    opacity: 0;
+    transform: translateY(-10px);
+    position: absolute;
+    width: calc(100% - 3rem);
+    left: 1.5rem;
+}
+
+.work-card:hover .work-details-hover,
+.work-card:hover .work-description-hover {
+    opacity: 1;
+    transform: translateY(0);
+    position: relative;
+    width: 100%;
+    left: 0;
+}
+
+/* 悬停时隐藏元数据和技术栈 */
+.work-card:hover .work-meta {
+    opacity: 0;
+    transform: translateY(-10px);
+    position: absolute;
+    margin-bottom: 0;
+}
+
+.work-card:hover .work-tech {
+    opacity: 0;
+    transform: translateY(10px);
+    position: absolute;
+    bottom: 1.5rem;
+    margin-top: 0;
+}
+
+/* 为描述和详细信息添加样式 */
+.work-description {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+.work-details {
+    color: var(--text-tertiary);
+    font-size: 0.85rem;
+    line-height: 1.5;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 1rem;
+    margin-top: 0.5rem;
+}
+
+.work-content {
+    position: relative;
+    min-height: 180px;
+    padding-bottom: 1rem;
+}
+
 .video-container {
     position: relative;
     width: 100%;
@@ -404,6 +485,13 @@ body {
     margin-bottom: 0.75rem;
     color: var(--text-primary);
     line-height: 1.4;
+    transition: var(--transition);
+}
+
+/* 悬停时调整标题样式，为详细内容提供空间 */
+.work-card:hover .work-title {
+    margin-bottom: 0.5rem;
+    font-size: 1.15rem;
 }
 
 .work-excerpt {
