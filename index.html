@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>技术博客 - Tech Blog</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <header class="header">
+        <nav class="nav">
+            <div class="nav-container">
+                <a href="#" class="logo">
+                    <span class="logo-icon">◈</span>
+                    <span class="logo-text">Tech Blog</span>
+                </a>
+                <ul class="nav-menu">
+                    <li class="nav-item"><a href="#home" class="nav-link">首页</a></li>
+                    <li class="nav-item"><a href="#articles" class="nav-link">文章</a></li>
+                    <li class="nav-item"><a href="#about" class="nav-link">关于</a></li>
+                    <li class="nav-item"><a href="#contact" class="nav-link">联系</a></li>
+                </ul>
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section id="home" class="hero">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    <span class="gradient-text">探索技术</span>
+                    <span class="hero-subtitle">分享知识，创造价值</span>
+                </h1>
+                <p class="hero-description">
+                    深入前沿技术，分享开发经验，记录学习历程。在这里，技术与创意相遇。
+                </p>
+                <div class="hero-buttons">
+                    <a href="#articles" class="btn btn-primary">开始阅读</a>
+                    <a href="#about" class="btn btn-secondary">了解更多</a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="floating-card">
+                    <div class="card-content">
+                        <div class="code-snippet">
+                            <code>const future = technology + creativity;</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="articles" class="articles">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">最新文章</h2>
+                    <p class="section-subtitle">深入技术细节，分享实践经验</p>
+                </div>
+
+                <div class="articles-grid">
+                    <article class="article-card">
+                        <div class="article-image">
+                            <div class="article-gradient gradient-1"></div>
+                        </div>
+                        <div class="article-content">
+                            <div class="article-meta">
+                                <span class="article-date">2024-01-15</span>
+                                <span class="article-category">前端开发</span>
+                            </div>
+                            <h3 class="article-title">现代CSS技术深度解析</h3>
+                            <p class="article-excerpt">
+                                探索CSS Grid、Flexbox和自定义属性在现代Web开发中的应用，了解如何创建灵活且美观的布局系统。
+                            </p>
+                            <a href="article/sample-article.html" class="article-link">阅读更多 →</a>
+                        </div>
+                    </article>
+
+                    <article class="article-card">
+                        <div class="article-image">
+                            <div class="article-gradient gradient-2"></div>
+                        </div>
+                        <div class="article-content">
+                            <div class="article-meta">
+                                <span class="article-date">2024-01-10</span>
+                                <span class="article-category">JavaScript</span>
+                            </div>
+                            <h3 class="article-title">JavaScript异步编程最佳实践</h3>
+                            <p class="article-excerpt">
+                                从回调函数到Promise，再到async/await，全面掌握JavaScript异步编程的演进和最佳实践。
+                            </p>
+                            <a href="article/text1.html" class="article-link">阅读更多 →</a>
+                        </div>
+                    </article>
+
+                    <article class="article-card">
+                        <div class="article-image">
+                            <div class="article-gradient gradient-3"></div>
+                        </div>
+                        <div class="article-content">
+                            <div class="article-meta">
+                                <span class="article-date">2024-01-05</span>
+                                <span class="article-category">性能优化</span>
+                            </div>
+                            <h3 class="article-title">Web性能优化策略</h3>
+                            <p class="article-excerpt">
+                                深入了解Web性能优化技术，包括代码分割、懒加载、缓存策略等实用技巧。
+                            </p>
+                            <a href="article/text2.html" class="article-link">阅读更多 →</a>
+                        </div>
+                    </article>
+
+                    <article class="article-card">
+                        <div class="article-image">
+                            <div class="article-gradient gradient-4"></div>
+                        </div>
+                        <div class="article-content">
+                            <div class="article-meta">
+                                <span class="article-date">2023-12-28</span>
+                                <span class="article-category">React</span>
+                            </div>
+                            <h3 class="article-title">React Hooks深入理解</h3>
+                            <p class="article-excerpt">
+                                详细解析React Hooks的工作原理，掌握useState、useEffect等核心Hook的使用技巧。
+                            </p>
+                            <a href="article/sample-article.html" class="article-link">阅读更多 →</a>
+                        </div>
+                    </article>
+
+                    <article class="article-card">
+                        <div class="article-image">
+                            <div class="article-gradient gradient-5"></div>
+                        </div>
+                        <div class="article-content">
+                            <div class="article-meta">
+                                <span class="article-date">2023-12-20</span>
+                                <span class="article-category">TypeScript</span>
+                            </div>
+                            <h3 class="article-title">TypeScript类型系统进阶</h3>
+                            <p class="article-excerpt">
+                                掌握TypeScript高级类型特性，包括泛型、条件类型、映射类型等，提升代码质量。
+                            </p>
+                            <a href="article/text4.html" class="article-link">阅读更多 →</a>
+                        </div>
+                    </article>
+
+                    <article class="article-card">
+                        <div class="article-image">
+                            <div class="article-gradient gradient-6"></div>
+                        </div>
+                        <div class="article-content">
+                            <div class="article-meta">
+                                <span class="article-date">2023-12-15</span>
+                                <span class="article-category">开发工具</span>
+                            </div>
+                            <h3 class="article-title">现代开发工具链</h3>
+                            <p class="article-excerpt">
+                                介绍VS Code、Webpack、ESLint等现代开发工具的配置和最佳实践。
+                            </p>
+                            <a href="article/text2.html" class="article-link">阅读更多 →</a>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="load-more">
+                    <button class="btn btn-outline">加载更多文章</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="about">
+            <div class="container">
+                <div class="about-content">
+                    <div class="about-text">
+                        <h2 class="about-title">关于我</h2>
+                        <p class="about-description">
+                            我是一名充满热情的全栈开发者，专注于前端技术和用户体验设计。
+                            通过这个博客，我希望能够分享我的技术经验，帮助更多的开发者成长。
+                        </p>
+                        <div class="skills">
+                            <div class="skill-item">
+                                <span class="skill-name">Unity</span>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="width: 90%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <span class="skill-name">C#</span>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="width: 75%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <span class="skill-name">UI设计</span>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" style="width: 80%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="about-visual">
+                        <div class="profile-card">
+                            <img class="profile-avatar" src="picture/avatar.jpg" alt="开发者头像">
+                            <div class="profile-info">
+                                <h3>开发者</h3>
+                                <p>Unity客户端</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="contact">
+            <div class="container">
+                <div class="contact-content">
+                    <h2 class="contact-title">联系我</h2>
+                    <p class="contact-description">
+                        有项目合作或技术交流，欢迎与我联系
+                    </p>
+                    <div class="contact-methods">
+                        <a href="mailto:1581603785@qq.com" class="contact-method">
+                            <span class="contact-icon">✉️</span>
+                            <span class="contact-text">Email</span>
+                        </a>
+                        <a href="#" class="contact-method">
+                            <span class="contact-icon">💼</span>
+                            <span class="contact-text">LinkedIn</span>
+                        </a>
+                        <a href="https://github.com/Kingishu" class="contact-method">
+                            <span class="contact-icon">🐙</span>
+                            <span class="contact-text">GitHub</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Tech Blog</h3>
+                    <p>分享技术，传播知识</p>
+                </div>
+                <div class="footer-section">
+                    <h4>快速链接</h4>
+                    <ul class="footer-links">
+                        <li><a href="#home">首页</a></li>
+                        <li><a href="#articles">文章</a></li>
+                        <li><a href="#about">关于</a></li>
+                        <li><a href="#contact">联系</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>技术栈</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Unity</a></li>
+                        <li><a href="#">C#</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Tech Blog. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

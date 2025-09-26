@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C#核心概念深度解析 - Tech Blog</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <style>
+        /* General styles assumed to be in styles.css */
+        :root {
+            --primary-color: #007AFF;
+            --secondary-color: #5AC8FA;
+            --background-color: #121212;
+            --card-color: #1e1e1e;
+            --border-color: #333;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a0;
+            --border-radius: 8px;
+            --transition: all 0.3s ease;
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-primary);
+            margin: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        /* Article specific styles */
+        .article-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 100px 0 80px;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .article-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="50" r="0.5" fill="white" opacity="0.05"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.1;
+        }
+
+        .article-title {
+            font-size: 3rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .article-meta {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            align-items: center;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .article-meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .article-content {
+            padding: 80px 0;
+            background: var(--background-color);
+        }
+
+        .article-layout {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 3rem;
+        }
+
+        .article-body {
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .article-sidebar {
+            position: sticky;
+            top: 120px;
+            height: fit-content;
+        }
+
+        .article-body h2 {
+            font-size: 2rem;
+            font-weight: 600;
+            margin: 2rem 0 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--primary-color);
+            color: var(--text-primary);
+        }
+
+        .article-body h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 1.5rem 0 1rem;
+            color: var(--text-primary);
+        }
+
+        .article-body p {
+            margin-bottom: 1.5rem;
+            color: var(--text-secondary);
+        }
+
+        .article-body ul,
+        .article-body ol {
+            margin: 1rem 0 1.5rem 2rem;
+            color: var(--text-secondary);
+        }
+
+        .article-body li {
+            margin-bottom: 0.5rem;
+        }
+
+        .article-body blockquote {
+            border-left: 4px solid var(--primary-color);
+            padding-left: 2rem;
+            margin: 2rem 0;
+            color: var(--text-secondary);
+            font-style: italic;
+            background: rgba(0, 122, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+        }
+
+        .article-body pre {
+            background: var(--card-color);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .article-body code {
+            background: rgba(0, 122, 255, 0.1);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.9em;
+            color: var(--primary-color);
+        }
+
+        .article-body pre code {
+            background: none;
+            padding: 0;
+            color: inherit;
+        }
+
+        .back-to-blog {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            margin-bottom: 2rem;
+            transition: var(--transition);
+        }
+
+        .back-to-blog:hover {
+            color: var(--primary-color);
+        }
+
+        .toc {
+            background: var(--card-color);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin: 0;
+        }
+
+        .toc h3 {
+            margin: 0 0 1rem 0;
+            color: var(--text-primary);
+        }
+
+        .toc ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .toc li {
+            margin-bottom: 0.5rem;
+        }
+
+        .toc a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: var(--transition);
+            display: block;
+            padding: 0.25rem 0;
+        }
+
+        .toc a:hover {
+            color: var(--primary-color);
+            transform: translateX(5px);
+        }
+
+        @media (max-width: 992px) {
+            .article-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .article-sidebar {
+                position: static;
+                order: -1;
+                margin-bottom: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .article-title {
+                font-size: 2rem;
+            }
+
+            .article-meta {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+    </header>
+
+    <article>
+        <div class="article-header">
+            <div class="container">
+                <a href="index.html" class="back-to-blog">
+                    <span>←</span>
+                    <span>返回博客</span>
+                </a>
+                <h1 class="article-title">C#核心概念深度解析</h1>
+                <div class="article-meta">
+                    <span>📅 2025-09-26</span>
+                    <span>🏷️ C#, .NET, Unity</span>
+                    <span>⏱️ 阅读时间：7分钟</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="article-content">
+            <div class="container">
+                <div class="article-layout">
+                    <div class="article-body">
+                        <p>
+                            本文档旨在深入探讨C#编程语言中的几个核心且基础的概念，包括转义字符、类型转换、枚举、接口的显式实现，以及多态中的类型判断和 `new`
+                            关键字的使用。理解这些基础知识对于构建健壮、可维护的应用程序至关重要。
+                        </p>
+
+                        <h2 id="escape-chars">一、转义字符</h2>
+                        <p>在字符串中，某些字符具有特殊含义。为了按字面意义使用它们，我们需要使用转义字符，即反斜杠 `\`。</p>
+
+                        <h3>常用的转义字符</h3>
+                        <ul>
+                            <li><code>\'</code>: 表示单引号。例如: <code>string str = "It\'s a cat."</code>;</li>
+                            <li><code>\"</code>: 表示双引号。例如: <code>string str = "他说:\"你好\"";</code></li>
+                            <li><code>\n</code>: 表示换行符。</li>
+                            <li><code>\\</code>: 表示一个反斜杠本身。例如: <code>string path = "C:\\Windows\\System32";</code></li>
+                        </ul>
+
+                        <h3>不常用的转义字符</h3>
+                        <ul>
+                            <li><code>\t</code>: 制表符，相当于按下Tab键，通常用于对齐文本。</li>
+                            <li><code>\b</code>: 光标退格，将光标位置向后移动一个字符。</li>
+                            <li><code>\0</code>: 空字符，在某些底层操作或字符串结尾处理时会用到。</li>
+                            <li><code>\a</code>: 警报音，执行时会让系统发出一声提示音。</li>
+                        </ul>
+
+                        <h3>取消转义</h3>
+                        <p>如果你希望字符串中的所有字符都按其字面意义显示，可以在字符串前面加上 <code>@</code> 符号。这在处理文件路径时特别有用。</p>
+                        <pre><code class="language-csharp">// 使用@可以避免转义，代码更清晰
+string path = @"C:\Users\Documents\MyFile.txt";
+</code></pre>
+
+                        <h2 id="type-conversion">二、类型转换</h2>
+                        <p>在C#中，将一种数据类型的值转换为另一种数据类型是常见的操作。</p>
+
+                        <h3>隐式类型转换</h3>
+                        <p>从小范围类型到大范围类型的转换（例如 `int` 到 `long`），编译器可以自动完成，因为这个过程不会丢失数据精度。这被称为隐式转换。</p>
+                        <pre><code class="language-csharp">int myInt = 100;
+long myLong = myInt; // 隐式转换，安全
+</code></pre>
+
+                        <h3>显式类型转换（强制转换）</h3>
+                        <p>当转换可能导致数据丢失时（例如 `double` 到 `int`），需要显式地告诉编译器你意图进行此转换。</p>
+                        <ol>
+                            <li><strong>括号强转</strong>: 简单直接，但如果转换失败会在运行时抛出
+                                `InvalidCastException`。<code>double d = 9.78; int i = (int)d;</code></li>
+                            <li><strong>Parse方法</strong>: 主要用于将字符串转换为数值类型。例如
+                                <code>int.Parse("123")</code>。如果字符串格式不正确，会抛出异常。
+                            </li>
+                            <li><strong>Convert类</strong>: 提供了一系列方法，可以在多种类型之间进行转换，例如
+                                <code>Convert.ToInt32("123")</code>。它比Parse更灵活，可以处理 `null` 值（通常返回0）。
+                            </li>
+                            <li><strong>ToString()方法</strong>: 几乎所有类型都具备此方法，用于将其值转换为字符串表示。例如
+                                <code>int num = 10; string s = num.ToString();</code>
+                            </li>
+                        </ol>
+
+                        <h2 id="enums">三、枚举（Enum）</h2>
+                        <p>枚举是一组命名的整型常量，它增强了代码的可读性和类型安全。它的本质是整数类型的包装。</p>
+                        <p>在编译后，枚举类型会被编译为一个继承自 `System.Enum` 的<strong>密封类（sealed
+                                class）</strong>，因此枚举是值类型。每个枚举成员本质上是一个常量整数，默认从 0 开始递增。</p>
+                        <pre><code class="language-csharp">public enum Direction { North, South, East, West }
+// North = 0, South = 1, East = 2, West = 3
+</code></pre>
+                        <p>上面的定义在编译后，其概念等价于：</p>
+                        <pre><code class="language-csharp">public sealed class Direction : System.Enum
+{
+    public const int North = 0;
+    public const int South = 1;
+    public const int East = 2;
+    public const int West = 3;
+}
+</code></pre>
+
+                        <h2 id="interfaces">四、接口（Interface）与显式实现</h2>
+                        <p>接口定义了一个契约。任何实现该接口的类或结构都必须提供接口中所定义成员的实现。常规的接口实现是直接在类中定义一个同名的 `public` 方法。</p>
+
+                        <h3>当方法名冲突时</h3>
+                        <p>当一个类需要实现两个包含同名方法的接口时，常规实现方式会导致冲突。例如：</p>
+                        <pre><code class="language-csharp">interface ICanFastRun { void Run(); }
+interface ICanSlowRun { void Run(); }
+</code></pre>
+                        <p>为了解决这个问题，我们需要使用<strong>显式接口实现</strong>。</p>
+                        <pre><code class="language-csharp">public class Dog : ICanFastRun, ICanSlowRun
+{
+    void ICanSlowRun.Run()
+    {
+        Console.WriteLine("我可以跑的很慢");
+    }
+    void ICanFastRun.Run()
+    {
+        Console.WriteLine("我可以跑的很快");
+    }
+}
+</code></pre>
+                        <blockquote>
+                            显式接口实现的成员默认是 `private` 的，不能通过类的实例直接调用。它只能通过接口类型的引用来调用。
+                        </blockquote>
+                        <p>这种机制一方面解决了命名冲突，另一方面也起到了隐藏方法、清洁API的作用。调用时必须将对象强制转换为对应的接口类型：</p>
+                        <pre><code class="language-csharp">Dog dog = new Dog();
+// dog.Run(); // 这行代码会编译报错！
+
+// 必须强制类型转换
+((ICanFastRun)dog).Run(); // 输出: 我可以跑的很快
+((ICanSlowRun)dog).Run(); // 输出: 我可以跑的很慢
+</code></pre>
+
+                        <h2 id="polymorphism-types">五、多态中的类型</h2>
+                        <p>在面向对象编程中，一个对象变量可以引用不同类型的对象。我们需要区分变量的“编译时类型”和“运行时类型”。</p>
+                        <pre><code class="language-csharp">public class Animal { }
+public class Dog : Animal { }
+public class Cat : Animal { }
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        Animal animal = new Animal();
+        Animal dog = new Dog(); // 子类实例赋值给父类引用
+        Animal cat = new Cat();
+    }
+}
+</code></pre>
+                        <p>在上面的代码中，`animal`, `dog`, `cat` 这三个变量的类型是什么？</p>
+                        <ul>
+                            <li><strong>编译时类型</strong>: 编译器在检查语法和类型安全时所看到的类型。这三个变量的编译时类型都是 `Animal`，因为它们都是这样声明的（等号左边）。
+                            </li>
+                            <li><strong>运行时类型</strong>: 程序实际运行时，变量所引用的对象的真实类型。`animal` 的运行时类型是 `Animal`，`dog` 的运行时类型是
+                                `Dog`，`cat` 的运行时类型是 `Cat`（由 `new` 关键字决定，即等号右边）。</li>
+                        </ul>
+
+                        <h2 id="polymorphism-new">六、多态中的 new 关键字</h2>
+                        <p>`new` 关键字用于在派生类中隐藏基类的成员。它会中断继承链中的虚方法调用，从而影响多态行为。</p>
+                        <pre><code class="language-csharp">public class Animal
+{
+    public virtual void Eat()
+    {
+        Console.WriteLine("我正在吃");
+    }
+}
+
+public class Dog : Animal
+{
+    public new void Eat() // 使用 new 隐藏了基类的 Eat 方法
+    {
+        Console.WriteLine("狗正在吃");
+    }
+}
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        Animal animal = new Animal();
+        Animal dog1 = new Dog();
+        Dog dog2 = new Dog();
+
+        animal.Eat();
+        dog1.Eat();
+        dog2.Eat();
+    }
+}
+</code></pre>
+                        <p>输出结果为：</p>
+                        <pre><code>我正在吃
+我正在吃
+狗正在吃
+</code></pre>
+
+                        <h3>为什么 `dog1.Eat()` 输出 "我正在吃"？</h3>
+                        <p>关键在于 `new` 关键字切断了 `Animal.Eat` 和 `Dog.Eat` 之间的多态联系。</p>
+                        <ol>
+                            <li>
+                                <strong>编译阶段</strong>：编译器只看变量的<strong>声明类型</strong>。`dog1` 的声明类型是 `Animal`。编译器检查到
+                                `Animal` 类有 `Eat()` 方法，编译通过。由于 `Dog.Eat()` 是用 `new` 声明的，编译器认为它是一个与基类无关的全新方法，因此 `dog1`
+                                的调用被绑定到了 `Animal.Eat()`。
+                            </li>
+                            <li>
+                                <strong>运行阶段</strong>：CLR（公共语言运行时）执行编译时已经确定的调用。因为 `dog1` 在编译时被绑定到 `Animal.Eat()`，所以即使
+                                `dog1` 的实际对象是 `Dog`，它仍然执行基类的 `Eat()` 方法。相比之下，`dog2` 的声明类型是 `Dog`，所以它自然调用 `Dog` 类中的
+                                `Eat()` 方法。
+                            </li>
+                        </ol>
+                        <blockquote>
+                            简单总结：当子类方法使用 <code>new</code> 关键字时，调用哪个方法取决于变量的<strong>编译时类型</strong>（声明类型）；而当子类方法使用
+                            <code>override</code> 关键字时，调用哪个方法取决于变量的<strong>运行时类型</strong>（实际实例类型），这才是真正的多态。
+                        </blockquote>
+
+                    </div>
+
+                    <div class="article-sidebar">
+                        <div class="toc">
+                            <h3>目录</h3>
+                            <ul>
+                                <li><a href="#escape-chars">一、转义字符</a></li>
+                                <li><a href="#type-conversion">二、类型转换</a></li>
+                                <li><a href="#enums">三、枚举</a></li>
+                                <li><a href="#interfaces">四、接口与显式实现</a></li>
+                                <li><a href="#polymorphism-types">五、多态中的类型</a></li>
+                                <li><a href="#polymorphism-new">六、多态中的 new 关键字</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </article>
+
+    <footer class="footer">
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-csharp.min.js"></script>
+    <script>
+        // Directory highlight and scroll effect
+        document.addEventListener('DOMContentLoaded', function () {
+            const tocLinks = document.querySelectorAll('.toc a');
+            const sections = Array.from(tocLinks).map(link => {
+                const id = link.getAttribute('href').substring(1);
+                return document.getElementById(id);
+            }).filter(section => section !== null);
+
+            function highlightActiveSection() {
+                let current = '';
+                const scrollY = window.scrollY;
+
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop - 120; // offset for sticky nav/header
+                    if (scrollY >= sectionTop) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                tocLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').substring(1) === current) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+
+            window.addEventListener('scroll', highlightActiveSection);
+            highlightActiveSection(); // Initial check
+        });
+    </script>
+
+    <style>
+        /* Directory highlight style */
+        .toc a.active {
+            color: var(--primary-color);
+            font-weight: 600;
+            border-left: 3px solid var(--primary-color);
+            padding-left: 1rem;
+            transform: translateX(0);
+        }
+
+        .toc a {
+            transition: all 0.2s ease;
+            padding-left: calc(1rem - 3px);
+            border-left: 3px solid transparent;
+        }
+
+        /* Smooth scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</body>
+
+</html>
