@@ -256,30 +256,7 @@ const articlesDatabase = [
         gradient: 'gradient-4',
         link: 'article/unity-physics-engine.html'
     },
-    {
-        title: 'Web安全最佳实践',
-        excerpt: '了解常见的Web安全威胁和防护措施，保护你的应用免受攻击。',
-        category: '安全',
-        date: '2023-12-10',
-        gradient: 'gradient-1',
-        link: 'web-security.html'
-    },
-    {
-        title: 'Docker容器化部署',
-        excerpt: '学习如何使用Docker进行应用容器化，简化部署和运维流程。',
-        category: 'DevOps',
-        date: '2023-12-05',
-        gradient: 'gradient-2',
-        link: 'docker-deployment.html'
-    },
-    {
-        title: 'GraphQL API设计',
-        excerpt: '掌握GraphQL的核心概念，设计高效的API接口。',
-        category: '后端',
-        date: '2023-11-30',
-        gradient: 'gradient-3',
-        link: 'graphql-api.html'
-    }
+
 ];
 
 // Load more functionality
