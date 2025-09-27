@@ -61,11 +61,12 @@ const observer = new IntersectionObserver((entries) => {
             // Animate skill bars when in view
             if (entry.target.classList.contains('skill-item')) {
                 const skillBar = entry.target.querySelector('.skill-progress');
-                if (skillBar) {
-                    const width = skillBar.style.width;
-                    skillBar.style.width = '0';
+                if (skillBar && !skillBar.classList.contains('animated')) {
+                    const skillLevel = skillBar.getAttribute('data-skill');
+                    skillBar.style.width = '0%';
+                    skillBar.classList.add('animated');
                     setTimeout(() => {
-                        skillBar.style.width = width;
+                        skillBar.style.width = skillLevel + '%';
                     }, 200);
                 }
             }
