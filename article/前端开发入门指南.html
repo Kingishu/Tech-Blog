@@ -1,0 +1,500 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>前端开发入门指南 - Tech Blog</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <style>
+        /* Article specific styles */
+        .article-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 100px 0 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .article-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="50" r="0.5" fill="white" opacity="0.05"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.1;
+        }
+
+        .article-title {
+            font-size: 3rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .article-meta {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .article-meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .article-content {
+            padding: 80px 0;
+            background: #0A0A0A;
+        }
+
+        .article-layout {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .article-body {
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .article-sidebar {
+            position: sticky;
+            top: 120px;
+            height: fit-content;
+        }
+
+        .article-body h1, .article-body h2, .article-body h3, .article-body h4, .article-body h5, .article-body h6 {
+            font-weight: 600;
+            margin: 2rem 0 1rem;
+            color: var(--text-primary);
+        }
+
+        .article-body h1 {
+            font-size: 2.5rem;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .article-body h2 {
+            font-size: 2rem;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .article-body h3 {
+            font-size: 1.5rem;
+        }
+
+        .article-body p {
+            margin-bottom: 1.5rem;
+            color: var(--text-secondary);
+            font-size: 1.15rem;
+            line-height: 1.7;
+            letter-spacing: 0.01em;
+        }
+
+        .article-body ul, .article-body ol {
+            margin: 1rem 0 1.5rem 2rem;
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .article-body li {
+            margin-bottom: 0.5rem;
+        }
+
+        .article-body blockquote {
+            border-left: 4px solid var(--primary-color);
+            padding-left: 2rem;
+            margin: 2rem 0;
+            color: var(--text-secondary);
+            font-style: italic;
+            background: rgba(0, 122, 255, 0.15);
+            padding: 1.5rem;
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .article-body pre {
+            background: #1a1a1a;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            overflow-x: auto;
+            position: relative;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .article-body code {
+            background: rgba(0, 122, 255, 0.2);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.9em;
+            color: #E0E0FF;
+            font-weight: 500;
+        }
+
+        .article-body pre code {
+            background: none;
+            padding: 0;
+            color: inherit;
+        }
+
+        .article-body img {
+            max-width: 100%;
+            height: auto;
+            border-radius: var(--border-radius);
+            margin: 1.5rem 0;
+        }
+
+        .article-body a {
+            color: var(--primary-color);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: var(--transition);
+        }
+
+        .article-body a:hover {
+            border-bottom-color: var(--primary-color);
+        }
+
+        .toc {
+            background: #1a1a1a;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin: 0;
+        }
+
+        .toc h3 {
+            margin: 0 0 1rem 0;
+            color: var(--text-primary);
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .toc ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .toc li {
+            margin-bottom: 0.5rem;
+        }
+
+        .toc a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: var(--transition);
+            display: block;
+            padding: 0.35rem 0;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+
+        .toc a:hover {
+            color: var(--primary-color);
+            transform: translateX(5px);
+        }
+
+        .toc a.active {
+            color: var(--primary-color);
+            font-weight: 600;
+            border-left: 3px solid var(--primary-color);
+            padding-left: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .article-title {
+                font-size: 2rem;
+            }
+
+            .article-meta {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+
+            .article-body {
+                font-size: 1rem;
+            }
+
+            .article-body h1 {
+                font-size: 2rem;
+            }
+
+            .article-body h2 {
+                font-size: 1.5rem;
+            }
+
+            .article-body h3 {
+                font-size: 1.2rem;
+            }
+
+            .article-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .article-sidebar {
+                position: static;
+                order: -1;
+            }
+
+            .toc {
+                margin: 1rem 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="nav">
+            <div class="nav-container">
+                <a href="../index.html" class="logo">
+                    <span class="logo-icon">◈</span>
+                    <span class="logo-text">Tech Blog</span>
+                </a>
+                <ul class="nav-menu">
+                    <li class="nav-item"><a href="../index.html" class="nav-link">首页</a></li>
+                    <li class="nav-item"><a href="../index.html#articles" class="nav-link">文章</a></li>
+                    <li class="nav-item"><a href="../index.html#about" class="nav-link">关于</a></li>
+                    <li class="nav-item"><a href="../index.html#contact" class="nav-link">联系</a></li>
+                </ul>
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <article>
+        <div class="article-header">
+            <div class="container">
+                  <h1 class="article-title">前端开发入门指南</h1>
+                <div class="article-meta">
+                    <span>📅 2025-09-27</span>
+                    <span>🏷️ 前端开发</span>
+                    <span>⏱️ 阅读时间：1分钟</span>
+                    <span>👤 Kingishu</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="article-content">
+            <div class="container">
+                <div class="article-layout">
+                    <div class="article-body">
+                        <h1 id="heading-前端开发入门指南">前端开发入门指南</h1>
+<p>前端开发是现代Web开发的重要组成部分，它负责用户界面和用户体验的实现。</p>
+<h2 id="heading-什么是前端开发">什么是前端开发？</h2>
+<p>前端开发指的是开发网站或Web应用程序用户界面的过程。主要技术包括：</p>
+<ul>
+<li><strong>HTML</strong>: 定义网页的结构和内容</li>
+<li><strong>CSS</strong>: 控制网页的样式和布局</li>
+<li><strong>JavaScript</strong>: 实现网页的交互功能</li>
+</ul>
+<h2 id="heading-为什么学习前端开发">为什么学习前端开发？</h2>
+<ol>
+<li><strong>就业机会多</strong>: 几乎所有公司都需要前端开发者</li>
+<li><strong>成就感强</strong>: 可以立即看到自己的代码效果</li>
+<li><strong>学习曲线平缓</strong>: 入门相对容易，可以逐步深入</li>
+<li><strong>应用广泛</strong>: 从简单网页到复杂应用都用得到</li>
+</ol>
+<h2 id="heading-前端开发的学习路径">前端开发的学习路径</h2>
+<h3 id="heading-第一阶段基础技术栈">第一阶段：基础技术栈</h3>
+<ol>
+<li><p><strong>HTML基础</strong></p>
+<ul>
+<li>学习常用标签和语义化</li>
+<li>理解文档结构和DOM树</li>
+</ul>
+</li>
+<li><p><strong>CSS基础</strong></p>
+<ul>
+<li>掌握选择器和属性</li>
+<li>学习布局技术（Flexbox、Grid）</li>
+</ul>
+</li>
+<li><p><strong>JavaScript基础</strong></p>
+<ul>
+<li>变量、数据类型、函数</li>
+<li>DOM操作和事件处理</li>
+</ul>
+</li>
+</ol>
+<h3 id="heading-第二阶段框架和工具">第二阶段：框架和工具</h3>
+<ol>
+<li><strong>CSS预处理器</strong>（Sass/Less）</li>
+<li><strong>JavaScript框架</strong>（React/Vue/Angular）</li>
+<li><strong>构建工具</strong>（Webpack/Vite）</li>
+<li><strong>版本控制</strong>（Git）</li>
+</ol>
+<h2 id="heading-实践建议">实践建议</h2>
+<ol>
+<li><strong>多做项目</strong>: 理论学习后立即动手实践</li>
+<li><strong>阅读源码</strong>: 分析优秀项目的代码结构</li>
+<li><strong>参与开源</strong>: 贡献代码提升技能</li>
+<li><strong>持续学习</strong>: 前端技术更新很快，要保持学习习惯</li>
+</ol>
+<h2 id="heading-推荐资源">推荐资源</h2>
+<ul>
+<li><strong>在线教程</strong>: MDN Web Docs、W3Schools</li>
+<li><strong>视频课程</strong>: freeCodeCamp、Codecademy</li>
+<li><strong>开发工具</strong>: VS Code、Chrome DevTools</li>
+<li><strong>社区</strong>: Stack Overflow、GitHub</li>
+</ul>
+<h2 id="heading-总结">总结</h2>
+<p>前端开发是一个充满创造力和挑战的领域。通过系统学习和持续实践，你将能够构建出优秀的Web应用。</p>
+<hr>
+<p>希望这篇指南能够帮助你开启前端开发的学习之旅！</p>
+
+                    </div>
+
+                    
+                    <div class="article-sidebar">
+                        <div class="toc">
+                            <h3>目录</h3>
+                            <ul><li><a href="#heading-什么是前端开发">什么是前端开发？</a></li>
+<li><a href="#heading-为什么学习前端开发">为什么学习前端开发？</a></li>
+<li><a href="#heading-前端开发的学习路径">前端开发的学习路径</a></li>
+    <li><a href="#heading-第一阶段基础技术栈">第一阶段：基础技术栈</a></li>
+    <li><a href="#heading-第二阶段框架和工具">第二阶段：框架和工具</a></li>
+<li><a href="#heading-实践建议">实践建议</a></li>
+<li><a href="#heading-推荐资源">推荐资源</a></li>
+<li><a href="#heading-总结">总结</a></li></ul>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </article>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Tech Blog</h3>
+                    <p>分享技术，传播知识</p>
+                </div>
+                <div class="footer-section">
+                    <h4>快速链接</h4>
+                    <ul class="footer-links">
+                        <li><a href="../index.html">首页</a></li>
+                        <li><a href="../index.html#articles">文章</a></li>
+                        <li><a href="../index.html#about">关于</a></li>
+                        <li><a href="../index.html#contact">联系</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>技术栈</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">JavaScript</a></li>
+                        <li><a href="#">React</a></li>
+                        <li><a href="#">Node.js</a></li>
+                        <li><a href="#">TypeScript</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Tech Blog. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-css.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-csharp.min.js"></script>
+    <script src="../script.js"></script>
+
+    <script>
+        // 目录高亮和滚动效果
+        document.addEventListener('DOMContentLoaded', function() {
+            const tocLinks = document.querySelectorAll('.toc a');
+            const sections = [];
+
+            // 收集所有章节
+            tocLinks.forEach(link => {
+                const targetId = link.getAttribute('href').substring(1);
+                const targetSection = document.getElementById(targetId);
+                if (targetSection) {
+                    sections.push({
+                        id: targetId,
+                        element: targetSection,
+                        link: link
+                    });
+                }
+            });
+
+            // 滚动时高亮当前章节
+            function highlightActiveSection() {
+                const scrollPosition = window.scrollY + 150;
+
+                sections.forEach(section => {
+                    const sectionTop = section.element.offsetTop;
+                    const sectionBottom = sectionTop + section.element.offsetHeight;
+
+                    if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
+                        tocLinks.forEach(link => link.classList.remove('active'));
+                        section.link.classList.add('active');
+                    }
+                });
+            }
+
+            // 平滑滚动到章节
+            tocLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetSection = document.getElementById(targetId);
+
+                    if (targetSection) {
+                        const offsetTop = targetSection.offsetTop - 100;
+                        window.scrollTo({
+                            top: offsetTop,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+
+            // 监听滚动事件
+            if (sections.length > 0) {
+                window.addEventListener('scroll', highlightActiveSection);
+                highlightActiveSection();
+            }
+        });
+    </script>
+</body>
+</html>
+        

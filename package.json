@@ -1,0 +1,23 @@
+{
+  "name": "tech-blog-md-converter",
+  "version": "1.0.0",
+  "description": "MD文档转文章自动化工具",
+  "main": "md-to-article.js",
+  "scripts": {
+    "start": "node md-to-article.js",
+    "build": "node md-to-article.js",
+    "watch": "node md-to-article.js"
+  },
+  "keywords": [
+    "markdown",
+    "blog",
+    "automation",
+    "converter"
+  ],
+  "author": "Kingishu",
+  "license": "MIT",
+  "dependencies": {
+    "marked": "^12.0.0"
+  },
+  "devDependencies": {}
+}

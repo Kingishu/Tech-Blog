@@ -75,17 +75,13 @@ const observer = new IntersectionObserver((entries) => {
 }, observerOptions);
 
 // 生成文章目录
-// 动态生成文章目录
 function generateArticlesCatalog() {
     const catalogContent = document.querySelector('.catalog-content');
     if (!catalogContent) return;
 
     catalogContent.innerHTML = '';
 
-    // 从articlesDatabase动态生成目录结构
-    const catalogStructure = buildCatalogStructure(articlesDatabase);
-
-    catalogStructure.forEach((category, categoryIndex) => {
+    articlesCatalog.forEach((category, categoryIndex) => {
         const categoryElement = document.createElement('div');
         categoryElement.className = 'catalog-category';
         categoryElement.innerHTML = `
@@ -153,48 +149,6 @@ function generateArticlesCatalog() {
         categoryElement.appendChild(sectionsContainer);
         catalogContent.appendChild(categoryElement);
     });
-}
-
-// 构建目录结构
-function buildCatalogStructure(articles) {
-    const catalog = {};
-    const categoryIcons = {
-        'Unity开发': '🎮',
-        '前端开发': '🌐',
-        '测试内容': '🧪',
-        '游戏开发': '🎯',
-        '技术文章': '💻',
-        '默认': '📝'
-    };
-
-    articles.forEach(article => {
-        const category = article.category || '默认';
-        const section = article.section || '默认分区';
-
-        if (!catalog[category]) {
-            catalog[category] = {
-                category: category,
-                icon: categoryIcons[category] || categoryIcons['默认'],
-                sections: {}
-            };
-        }
-
-        if (!catalog[category].sections[section]) {
-            catalog[category].sections[section] = {
-                title: section,
-                articles: []
-            };
-        }
-
-        catalog[category].sections[section].articles.push(article);
-    });
-
-    // 转换为数组格式
-    return Object.values(catalog).map(category => ({
-        category: category.category,
-        icon: category.icon,
-        sections: Object.values(category.sections)
-    }));
 }
 
 // 计算分类下的文章总数
@@ -504,29 +458,53 @@ const articlesCatalog = [
 // 文章数据库配置（扁平化用于卡片显示）
 const articlesDatabase = [
     {
-        title: '前端开发入门指南',
-        excerpt: '为初学者提供的前端开发入门指南，涵盖HTML、CSS、JavaScript基础知识',
-        category: '前端开发',
-        date: '2025-09-27',
-        gradient: 'gradient-5',
-        link: 'article/前端开发入门指南.html'
-    },
-    {
-        title: '对象池技术',
-        excerpt: '对象池技术是一种复用技术,可以大幅度提高频繁删除创建造成的性能问题',
+        title: 'Unity对象池技术详解',
+        excerpt: '深入解析Unity对象池技术，包括基础实现、通用对象池、对象池管理器和最佳实践。',
         category: 'Unity开发',
-        date: '2025-09-27',
-        gradient: 'gradient-5',
-        link: 'article/对象池技术.html'
+        date: '2024-09-27',
+        gradient: 'gradient-1',
+        link: 'article/unity-object-pooling.html'
     },
     {
-        title: 'md文档转atricle旧测试',
-        excerpt: '这是一个测试文档，用于验证MD转Article功能是否正常工作，包括描述字段的显示效果。',
-        category: '测试内容',
-        date: '2025-09-27',
+        title: 'Unity存储系统设计与实现',
+        excerpt: '详细介绍Unity存储系统的架构设计，包括数据结构、JSON序列化、本地存储和云存储集成。',
+        category: 'Unity开发',
+        date: '2024-09-27',
+        gradient: 'gradient-2',
+        link: 'article/unity-storage-system.html'
+    },
+    {
+        title: 'Unity射线检测技术详解',
+        excerpt: '全面讲解Unity射线检测的原理、方法和应用场景，包括基础检测、特殊形状检测和性能优化。',
+        category: 'Unity开发',
+        date: '2024-09-27',
+        gradient: 'gradient-3',
+        link: 'article/unity-raycasting.html'
+    },
+    {
+        title: 'Unity物理引擎深度解析',
+        excerpt: '深入探讨Unity物理引擎的核心组件、刚体系统、碰撞体、关节系统和性能优化技术。',
+        category: 'Unity开发',
+        date: '2024-09-27',
+        gradient: 'gradient-4',
+        link: 'article/unity-physics-engine.html'
+    },
+    {
+        title: 'JavaScript异步编程详解',
+        excerpt: '深入理解Promise、async/await、事件循环等JavaScript异步编程核心概念。',
+        category: '前端开发',
+        date: '2024-09-25',
         gradient: 'gradient-5',
-        link: 'article/md文档转atricle旧测试.html'
-    }
+        link: 'article/javascript-async.html'
+    },
+    {
+        title: '排序算法性能对比',
+        excerpt: '对比分析各种排序算法的时间复杂度、空间复杂度和实际应用场景。',
+        category: '算法与数据结构',
+        date: '2024-09-20',
+        gradient: 'gradient-6',
+        link: 'article/sorting-algorithms.html'
+    },
 ];
 
 // Load more functionality
