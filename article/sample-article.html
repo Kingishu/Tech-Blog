@@ -54,7 +54,7 @@
 
         .article-content {
             padding: 80px 0;
-            background: var(--background-color);
+            background: #0A0A0A;
         }
 
         .article-layout {
@@ -85,6 +85,7 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
         }
 
         .article-body h3 {
@@ -97,12 +98,17 @@
         .article-body p {
             margin-bottom: 1.5rem;
             color: var(--text-secondary);
+            font-size: 1.15rem;
+            line-height: 1.7;
+            letter-spacing: 0.01em;
         }
 
         .article-body ul,
         .article-body ol {
             margin: 1rem 0 1.5rem 2rem;
             color: var(--text-secondary);
+            font-size: 1.1rem;
+            line-height: 1.6;
         }
 
         .article-body li {
@@ -115,27 +121,32 @@
             margin: 2rem 0;
             color: var(--text-secondary);
             font-style: italic;
-            background: rgba(0, 122, 255, 0.1);
+            background: rgba(0, 122, 255, 0.15);
             padding: 1.5rem;
             border-radius: 0 var(--border-radius) var(--border-radius) 0;
+            font-size: 1.1rem;
+            line-height: 1.6;
         }
 
         .article-body pre {
-            background: var(--card-color);
+            background: #1a1a1a;
             border: 1px solid var(--border-color);
             border-radius: var(--border-radius);
             padding: 1.5rem;
             margin: 2rem 0;
             overflow-x: auto;
             position: relative;
+            font-size: 0.95rem;
+            line-height: 1.5;
         }
 
         .article-body code {
-            background: rgba(0, 122, 255, 0.1);
+            background: rgba(0, 122, 255, 0.2);
             padding: 0.2rem 0.4rem;
             border-radius: 4px;
             font-size: 0.9em;
-            color: var(--primary-color);
+            color: #E0E0FF;
+            font-weight: 500;
         }
 
         .article-body pre code {
@@ -191,7 +202,7 @@
         }
 
         .toc {
-            background: var(--card-color);
+            background: #1a1a1a;
             border: 1px solid var(--border-color);
             border-radius: var(--border-radius);
             padding: 1.5rem;
@@ -201,6 +212,8 @@
         .toc h3 {
             margin: 0 0 1rem 0;
             color: var(--text-primary);
+            font-size: 1.2rem;
+            font-weight: 600;
         }
 
         .toc ul {
@@ -218,7 +231,9 @@
             text-decoration: none;
             transition: var(--transition);
             display: block;
-            padding: 0.25rem 0;
+            padding: 0.35rem 0;
+            font-size: 0.95rem;
+            line-height: 1.4;
         }
 
         .toc a:hover {
@@ -674,6 +689,21 @@
             transition: all 0.3s ease;
             padding-left: 1rem;
             border-left: 3px solid transparent;
+        }
+
+        /* 增强文章内容可读性 */
+        .article-body {
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .article-body p {
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .article-body h1,
+        .article-body h2,
+        .article-body h3 {
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
         }
 
         /* 平滑滚动 */
