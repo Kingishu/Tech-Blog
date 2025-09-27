@@ -73,6 +73,153 @@ const observer = new IntersectionObserver((entries) => {
     });
 }, observerOptions);
 
+// 生成文章目录
+function generateArticlesCatalog() {
+    const catalogContent = document.querySelector('.catalog-content');
+    if (!catalogContent) return;
+
+    catalogContent.innerHTML = '';
+
+    articlesCatalog.forEach((category, categoryIndex) => {
+        const categoryElement = document.createElement('div');
+        categoryElement.className = 'catalog-category';
+        categoryElement.innerHTML = `
+            <div class="category-header" onclick="toggleCategory(${categoryIndex})">
+                <span class="category-icon">${category.icon}</span>
+                <span class="category-name">${category.category}</span>
+                <span class="category-count">${getCategoryArticleCount(category)}</span>
+            </div>
+        `;
+
+        const sectionsContainer = document.createElement('div');
+        sectionsContainer.className = 'category-sections';
+        sectionsContainer.id = `category-${categoryIndex}`;
+
+        category.sections.forEach((section, sectionIndex) => {
+            const sectionElement = document.createElement('div');
+            sectionElement.className = 'catalog-section';
+
+            const sectionTitle = document.createElement('div');
+            sectionTitle.className = 'section-title';
+            sectionTitle.textContent = section.title;
+
+            const articlesList = document.createElement('div');
+            articlesList.className = 'catalog-articles';
+
+            section.articles.forEach((article, articleIndex) => {
+                const articleLink = document.createElement('a');
+                articleLink.className = 'catalog-article';
+                articleLink.href = article.link || '#';
+                articleLink.innerHTML = `
+                    <span class="article-indicator"></span>
+                    <span class="article-title">${article.title}</span>
+                `;
+                articleLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    highlightActiveArticle(articleLink);
+
+                    // 跳转到文章页面
+                    if (article.link) {
+                        window.open(article.link, '_blank');
+                    } else {
+                        // 如果没有链接，滚动到对应的文章卡片
+                        const articleCard = document.querySelector(`[data-article-title="${article.title}"]`);
+                        if (articleCard) {
+                            articleCard.scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'center'
+                            });
+                            // 添加高亮效果
+                            articleCard.style.boxShadow = '0 0 20px rgba(0, 122, 255, 0.5)';
+                            setTimeout(() => {
+                                articleCard.style.boxShadow = '';
+                            }, 2000);
+                        }
+                    }
+                });
+                articlesList.appendChild(articleLink);
+            });
+
+            sectionElement.appendChild(sectionTitle);
+            sectionElement.appendChild(articlesList);
+            sectionsContainer.appendChild(sectionElement);
+        });
+
+        categoryElement.appendChild(sectionsContainer);
+        catalogContent.appendChild(categoryElement);
+    });
+}
+
+// 计算分类下的文章总数
+function getCategoryArticleCount(category) {
+    let count = 0;
+    category.sections.forEach(section => {
+        count += section.articles.length;
+    });
+    return count;
+}
+
+// 切换分类展开/收起
+function toggleCategory(categoryIndex) {
+    const sectionsContainer = document.getElementById(`category-${categoryIndex}`);
+    const isHidden = sectionsContainer.style.display === 'none';
+
+    // 切换显示状态
+    sectionsContainer.style.display = isHidden ? 'block' : 'none';
+
+    // 添加过渡动画
+    if (isHidden) {
+        sectionsContainer.style.opacity = '0';
+        sectionsContainer.style.transform = 'translateY(-10px)';
+        setTimeout(() => {
+            sectionsContainer.style.transition = 'all 0.3s ease';
+            sectionsContainer.style.opacity = '1';
+            sectionsContainer.style.transform = 'translateY(0)';
+        }, 10);
+    } else {
+        sectionsContainer.style.transition = 'all 0.3s ease';
+        sectionsContainer.style.opacity = '0';
+        sectionsContainer.style.transform = 'translateY(-10px)';
+        setTimeout(() => {
+            sectionsContainer.style.display = 'none';
+        }, 300);
+    }
+}
+
+// 高亮激活的文章
+function highlightActiveArticle(articleLink) {
+    // 移除其他文章的激活状态
+    document.querySelectorAll('.catalog-article').forEach(link => {
+        link.classList.remove('active');
+    });
+
+    // 添加当前文章的激活状态
+    articleLink.classList.add('active');
+}
+
+// 目录切换功能
+function setupCatalogToggle() {
+    const catalogToggle = document.querySelector('.catalog-toggle');
+    const catalogContent = document.querySelector('.catalog-content');
+    const toggleIcon = document.querySelector('.toggle-icon');
+
+    if (!catalogToggle || !catalogContent) return;
+
+    catalogToggle.addEventListener('click', () => {
+        const isHidden = catalogContent.style.display === 'none';
+
+        if (isHidden) {
+            catalogContent.style.display = 'block';
+            toggleIcon.textContent = '◀';
+            toggleIcon.style.transform = 'rotate(0deg)';
+        } else {
+            catalogContent.style.display = 'none';
+            toggleIcon.textContent = '▶';
+            toggleIcon.style.transform = 'rotate(180deg)';
+        }
+    });
+}
+
 // 初始化文章显示
 function initializeArticles() {
     const articlesGrid = document.querySelector('.articles-grid');
@@ -85,6 +232,12 @@ function initializeArticles() {
         articlesGrid.appendChild(articleCard);
         observer.observe(articleCard);
     });
+
+    // 生成文章目录
+    generateArticlesCatalog();
+
+    // 设置目录切换功能
+    setupCatalogToggle();
 }
 
 // Observe elements for animation
@@ -121,6 +274,7 @@ document.addEventListener('DOMContentLoaded', () => {
         observer.observe(profileCard);
     }
 });
+
 
 // Parallax effect for hero section
 window.addEventListener('scroll', () => {
@@ -204,7 +358,103 @@ const worksDatabase = [
     }
 ];
 
-// 文章数据库配置
+// 文章目录配置
+const articlesCatalog = [
+    {
+        category: 'Unity开发',
+        icon: '🎮',
+        sections: [
+            {
+                title: '核心系统',
+                articles: [
+                    {
+                        title: 'Unity对象池技术详解',
+                        excerpt: '深入解析Unity对象池技术，包括基础实现、通用对象池、对象池管理器和最佳实践。',
+                        date: '2024-09-27',
+                        gradient: 'gradient-1',
+                        link: 'article/unity-object-pooling.html'
+                    },
+                    {
+                        title: 'Unity存储系统设计与实现',
+                        excerpt: '详细介绍Unity存储系统的架构设计，包括数据结构、JSON序列化、本地存储和云存储集成。',
+                        date: '2024-09-27',
+                        gradient: 'gradient-2',
+                        link: 'article/unity-storage-system.html'
+                    }
+                ]
+            },
+            {
+                title: '物理与检测',
+                articles: [
+                    {
+                        title: 'Unity射线检测技术详解',
+                        excerpt: '全面讲解Unity射线检测的原理、方法和应用场景，包括基础检测、特殊形状检测和性能优化。',
+                        date: '2024-09-27',
+                        gradient: 'gradient-3',
+                        link: 'article/unity-raycasting.html'
+                    },
+                    {
+                        title: 'Unity物理引擎深度解析',
+                        excerpt: '深入探讨Unity物理引擎的核心组件、刚体系统、碰撞体、关节系统和性能优化技术。',
+                        date: '2024-09-27',
+                        gradient: 'gradient-4',
+                        link: 'article/unity-physics-engine.html'
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        category: '前端开发',
+        icon: '🌐',
+        sections: [
+            {
+                title: 'JavaScript入门',
+                articles: [
+                    {
+                        title: 'JavaScript基础语法',
+                        excerpt: '由表及里,带你了解js的所有语法内容',
+                        date: '2024-09-25',
+                        gradient: 'gradient-5',
+                        link: 'article/javascript-basic.html'
+                    }
+                ]
+            },
+            {
+                title: 'JavaScript进阶',
+                articles: [
+                    {
+                        title: 'JavaScript异步编程详解',
+                        excerpt: '深入理解Promise、async/await、事件循环等JavaScript异步编程核心概念。',
+                        date: '2024-09-25',
+                        gradient: 'gradient-5',
+                        link: 'article/javascript-async.html'
+                    },
+                ]
+            }
+        ]
+    },
+    {
+        category: '算法与数据结构',
+        icon: '🧮',
+        sections: [
+            {
+                title: '基础算法',
+                articles: [
+                    {
+                        title: '排序算法性能对比',
+                        excerpt: '对比分析各种排序算法的时间复杂度、空间复杂度和实际应用场景。',
+                        date: '2024-09-20',
+                        gradient: 'gradient-6',
+                        link: 'article/sorting-algorithms.html'
+                    }
+                ]
+            }
+        ]
+    }
+];
+
+// 文章数据库配置（扁平化用于卡片显示）
 const articlesDatabase = [
     {
         title: 'Unity对象池技术详解',
@@ -238,7 +488,22 @@ const articlesDatabase = [
         gradient: 'gradient-4',
         link: 'article/unity-physics-engine.html'
     },
-
+    {
+        title: 'JavaScript异步编程详解',
+        excerpt: '深入理解Promise、async/await、事件循环等JavaScript异步编程核心概念。',
+        category: '前端开发',
+        date: '2024-09-25',
+        gradient: 'gradient-5',
+        link: 'article/javascript-async.html'
+    },
+    {
+        title: '排序算法性能对比',
+        excerpt: '对比分析各种排序算法的时间复杂度、空间复杂度和实际应用场景。',
+        category: '算法与数据结构',
+        date: '2024-09-20',
+        gradient: 'gradient-6',
+        link: 'article/sorting-algorithms.html'
+    },
 ];
 
 // Load more functionality
@@ -395,6 +660,7 @@ if (worksLoadMoreBtn) {
 function createArticleCard(article) {
     const card = document.createElement('article');
     card.className = 'article-card';
+    card.setAttribute('data-article-title', article.title);
     card.innerHTML = `
         <div class="article-image">
             <div class="article-gradient ${article.gradient}"></div>
@@ -406,7 +672,7 @@ function createArticleCard(article) {
             </div>
             <h3 class="article-title">${article.title}</h3>
             <p class="article-excerpt">${article.excerpt}</p>
-            <a href="${article.link || '#'}" class="article-link">阅读更多 →</a>
+            <a href="${article.link || '#'}" class="article-link" target="_blank">阅读更多 →</a>
         </div>
     `;
     return card;

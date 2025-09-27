@@ -703,6 +703,192 @@ body {
     margin: 0 auto;
 }
 
+.articles-layout {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 3rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.articles-catalog {
+    background: var(--card-color);
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+    height: fit-content;
+    position: sticky;
+    top: 100px;
+    transition: var(--transition);
+}
+
+.catalog-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    background: rgba(0, 122, 255, 0.05);
+}
+
+.catalog-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.catalog-toggle {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 6px;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.catalog-toggle:hover {
+    background: rgba(0, 122, 255, 0.1);
+    color: var(--primary-color);
+}
+
+.toggle-icon {
+    font-size: 1rem;
+    transition: transform 0.3s ease;
+}
+
+.catalog-content {
+    padding: 1rem;
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+.catalog-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.catalog-content::-webkit-scrollbar-track {
+    background: var(--surface-color);
+}
+
+.catalog-content::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 3px;
+}
+
+.catalog-content::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-color);
+}
+
+.catalog-category {
+    margin-bottom: 1.5rem;
+}
+
+.catalog-category:last-child {
+    margin-bottom: 0;
+}
+
+.category-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.75rem;
+    background: rgba(0, 122, 255, 0.1);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.category-header:hover {
+    background: rgba(0, 122, 255, 0.15);
+}
+
+.category-icon {
+    font-size: 1.25rem;
+}
+
+.category-name {
+    font-weight: 600;
+    color: var(--text-primary);
+    flex: 1;
+}
+
+.category-count {
+    background: var(--primary-color);
+    color: white;
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 12px;
+    font-weight: 500;
+}
+
+.catalog-section {
+    margin-bottom: 1rem;
+    padding-left: 1rem;
+}
+
+.section-title {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.catalog-articles {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.catalog-article {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 0.75rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    border-radius: 6px;
+    transition: var(--transition);
+    font-size: 0.875rem;
+    line-height: 1.4;
+}
+
+.catalog-article:hover {
+    background: rgba(0, 122, 255, 0.1);
+    color: var(--primary-color);
+    transform: translateX(5px);
+}
+
+.catalog-article.active {
+    background: rgba(0, 122, 255, 0.2);
+    color: var(--primary-color);
+    font-weight: 500;
+}
+
+.article-indicator {
+    width: 6px;
+    height: 6px;
+    background: var(--text-tertiary);
+    border-radius: 50%;
+    margin-right: 0.5rem;
+    transition: var(--transition);
+}
+
+.catalog-article:hover .article-indicator,
+.catalog-article.active .article-indicator {
+    background: var(--primary-color);
+}
+
+.articles-main {
+    flex: 1;
+}
+
 .articles-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
@@ -1139,6 +1325,20 @@ body {
     .about-content {
         grid-template-columns: 1fr;
         gap: 2rem;
+    }
+
+    .articles-layout {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .articles-catalog {
+        position: static;
+        order: 2;
+    }
+
+    .articles-main {
+        order: 1;
     }
 
     .articles-grid {
