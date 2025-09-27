@@ -874,15 +874,17 @@ body {
 .article-indicator {
     width: 6px;
     height: 6px;
-    background: var(--text-tertiary);
+    background: transparent;
     border-radius: 50%;
     margin-right: 0.5rem;
     transition: var(--transition);
+    display: none;
 }
 
 .catalog-article:hover .article-indicator,
 .catalog-article.active .article-indicator {
-    background: var(--primary-color);
+    background: transparent;
+    display: none;
 }
 
 .articles-main {

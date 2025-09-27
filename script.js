@@ -507,6 +507,7 @@ const articlesDatabase = [
         title: '前端开发入门指南',
         excerpt: '为初学者提供的前端开发入门指南，涵盖HTML、CSS、JavaScript基础知识',
         category: '前端开发',
+        section: '技术文章',
         date: '2025-09-27',
         gradient: 'gradient-5',
         link: 'article/前端开发入门指南.html'
@@ -515,6 +516,7 @@ const articlesDatabase = [
         title: '对象池技术',
         excerpt: '对象池技术是一种复用技术,可以大幅度提高频繁删除创建造成的性能问题',
         category: 'Unity开发',
+        section: '核心系统',
         date: '2025-09-27',
         gradient: 'gradient-5',
         link: 'article/对象池技术.html'
@@ -523,6 +525,7 @@ const articlesDatabase = [
         title: 'md文档转atricle旧测试',
         excerpt: '这是一个测试文档，用于验证MD转Article功能是否正常工作，包括描述字段的显示效果。',
         category: '测试内容',
+        section: '默认分区',
         date: '2025-09-27',
         gradient: 'gradient-5',
         link: 'article/md文档转atricle旧测试.html'
