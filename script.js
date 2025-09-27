@@ -508,6 +508,24 @@ const articlesCatalog = [
 // 文章数据库配置（扁平化用于卡片显示）
 const articlesDatabase = [
     {
+        title: '789',
+        excerpt: '这是一个React入门教程，帮助初学者快速掌握React基础。',
+        category: '虚拟现实开发',
+        section: '核心系统',
+        date: '2025-09-27',
+        gradient: 'gradient-5',
+        link: 'article/789.html'
+    },
+    {
+        title: '十十一十二',
+        excerpt: '这是一个React入门教程，帮助初学者快速掌握React基础。',
+        category: '虚拟现实开发',
+        section: '核心系统',
+        date: '2025-09-27',
+        gradient: 'gradient-5',
+        link: 'article/十十一十二.html'
+    },
+    {
         title: '456',
         excerpt: '这是一个React入门教程，帮助初学者快速掌握React基础。',
         category: '虚拟现实开发',
@@ -731,14 +749,57 @@ if (worksLoadMoreBtn) {
     });
 }
 
+// 生成随机渐变颜色
+function generateRandomGradient() {
+    const colorSets = [
+        // 紫色系
+        ['#667eea', '#764ba2', '#9f7aea', '#b794f6'],
+        // 粉色系
+        ['#f093fb', '#f5576c', '#ff6b9d', '#c44569'],
+        // 蓝色系
+        ['#4facfe', '#00f2fe', '#74b9ff', '#0984e3'],
+        // 绿色系
+        ['#43e97b', '#38f9d7', '#00b894', '#00cec9'],
+        // 橙色系
+        ['#fa709a', '#fee140', '#fdcb6e', '#e17055'],
+        // 青色系
+        ['#a8edea', '#fed6e3', '#74c0fc', '#339af0'],
+        // 红色系
+        ['#ff6b6b', '#f06595', '#e64980', '#d6336c'],
+        // 黄色系
+        ['#ffd93d', '#ff9f40', '#ff6348', '#ff4757'],
+        // 深蓝系
+        ['#667eea', '#764ba2', '#4c6ef5', '#364fc7'],
+        // 紫红系
+        ['#f093fb', '#f5576c', '#fa709a', '#ff6b9d']
+    ];
+
+    const randomSet = colorSets[Math.floor(Math.random() * colorSets.length)];
+    const color1 = randomSet[Math.floor(Math.random() * randomSet.length)];
+    const color2 = randomSet[Math.floor(Math.random() * randomSet.length)];
+
+    // 确保两个颜色不相同
+    const finalColor2 = color1 === color2 ?
+        randomSet.find(c => c !== color1) || randomSet[1] : color2;
+
+    const directions = ['135deg', '45deg', '90deg', '180deg', '270deg', '315deg'];
+    const direction = directions[Math.floor(Math.random() * directions.length)];
+
+    return `linear-gradient(${direction}, ${color1} 0%, ${finalColor2} 100%)`;
+}
+
 // Function to create article card
 function createArticleCard(article) {
     const card = document.createElement('article');
     card.className = 'article-card';
     card.setAttribute('data-article-title', article.title);
+
+    // 生成随机渐变背景
+    const randomGradient = generateRandomGradient();
+
     card.innerHTML = `
         <div class="article-image">
-            <div class="article-gradient ${article.gradient}"></div>
+            <div class="article-gradient" style="background: ${randomGradient}"></div>
         </div>
         <div class="article-content">
             <div class="article-meta">
