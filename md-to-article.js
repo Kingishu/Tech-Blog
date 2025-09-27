@@ -425,7 +425,7 @@ function generateArticleHTML(metadata, markdownContent) {
                   <h1 class="article-title">${metadata.title}</h1>
                 <div class="article-meta">
                     <span>📅 ${metadata.date}</span>
-                    <span>🏷️ ${metadata.category}</span>
+                    <span>🏷️ ${metadata.category}-${metadata.section}</span>
                     <span>⏱️ 阅读时间：${metadata.readTime}</span>
                     ${metadata.author ? `<span>👤 ${metadata.author}</span>` : ''}
                 </div>
@@ -608,6 +608,91 @@ function findArticleIndex(title, existingArticles) {
     );
 }
 
+// 自动创建目录结构
+function createDirectoryStructure(category, section) {
+    try {
+        const scriptContent = fs.readFileSync(config.articlesDataPath, 'utf8');
+
+        // 解析现有的目录结构 - 使用更精确的正则表达式
+        const catalogMatch = scriptContent.match(/const articlesCatalog = (\[[\s\S]*?\]\s*);/);
+        if (!catalogMatch) {
+            console.error('❌ 未找到文章目录结构');
+            return false;
+        }
+
+        let catalog = [];
+        try {
+            // 解析目录结构
+            const catalogContent = catalogMatch[1]
+                .replace(/(\w+):/g, '"$1":')
+                .replace(/'/g, '"');
+            catalog = JSON.parse(catalogContent);
+        } catch (error) {
+            console.error('❌ 解析目录结构失败:', error.message);
+            console.error('解析内容:', catalogContent);
+            return false;
+        }
+
+        // 检查category是否存在
+        let categoryIndex = catalog.findIndex(cat => cat.category === category);
+
+        if (categoryIndex === -1) {
+            // 创建新的category
+            const categoryIcons = {
+                'Unity开发': '🎮',
+                '前端开发': '🌐',
+                '测试内容': '🧪',
+                '游戏开发': '🎯',
+                '技术文章': '💻',
+                '算法与数据结构': '🧮',
+                '默认': '📝'
+            };
+
+            const newCategory = {
+                category: category,
+                icon: categoryIcons[category] || categoryIcons['默认'],
+                sections: []
+            };
+
+            catalog.push(newCategory);
+            categoryIndex = catalog.length - 1;
+            console.log(`✅ 已创建新分类: ${category}`);
+        }
+
+        // 检查section是否存在
+        const categoryObj = catalog[categoryIndex];
+        let sectionIndex = categoryObj.sections.findIndex(sec => sec.title === section);
+
+        if (sectionIndex === -1) {
+            // 创建新的section
+            categoryObj.sections.push({
+                title: section,
+                articles: []
+            });
+            console.log(`✅ 已创建新分区: ${section} (分类: ${category})`);
+        }
+
+        // 生成新的目录内容
+        const jsonString = JSON.stringify(catalog, null, 4)
+            .replace(/"(\w+)":/g, '$1:')
+            .replace(/"/g, "'");
+        const newCatalogContent = `const articlesCatalog = ${jsonString};`;
+
+        // 替换原有的目录定义 - 使用更精确的正则表达式
+        const catalogPattern = /const articlesCatalog = \[[\s\S]*?\]\s*;/;
+        const updatedContent = scriptContent.replace(catalogPattern, newCatalogContent);
+
+        // 写回文件
+        fs.writeFileSync(config.articlesDataPath, updatedContent, 'utf8');
+
+        console.log(`📝 新目录结构已写入文件`);
+        return true;
+    } catch (error) {
+        console.error('❌ 创建目录结构失败:', error.message);
+        return false;
+    }
+}
+
 // 更新或添加文章数据
 function updateArticlesData(metadata, fileName) {
     const articlePath = `article/${fileName}.html`;
@@ -626,6 +711,7 @@ function updateArticlesData(metadata, fileName) {
             title: metadata.title,
             excerpt: metadata.excerpt,
             category: metadata.category,
+            section: metadata.section,
             date: metadata.date,
             gradient: metadata.gradient,
             link: articlePath
@@ -639,6 +725,12 @@ function updateArticlesData(metadata, fileName) {
             // 添加新文章
             existingArticles.unshift(articleObj);
             console.log(`✅ 已添加新文章到数据库: ${metadata.title}`);
+
+            // 自动创建目录结构
+            const directoryCreated = createDirectoryStructure(metadata.category, metadata.section);
+            if (directoryCreated) {
+                console.log(`✅ 已自动创建目录结构: ${metadata.category} > ${metadata.section}`);
+            }
         }
 
         // 生成新的数据库内容（保持JavaScript对象格式）
@@ -653,11 +745,6 @@ function updateArticlesData(metadata, fileName) {
 
         // 写回文件
         fs.writeFileSync(config.articlesDataPath, updatedContent, 'utf8');
-
-        // 如果是新文章，提示手动添加到目录
-        if (articleIndex < 0) {
-            console.log(`⚠️  请手动将文章添加到文章目录中，分类: ${metadata.category}, 分区: ${metadata.section}`);
-        }
 
     } catch (error) {
         console.error('❌ 更新文章数据失败:', error.message);

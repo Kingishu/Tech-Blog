@@ -832,6 +832,27 @@ body {
     padding-left: 1rem;
 }
 
+/* 第三级目录样式 */
+.subsection {
+    margin-bottom: 0.5rem;
+    padding-left: 1rem;
+    border-left: 2px solid rgba(0, 122, 255, 0.2);
+}
+
+.subsection-title {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    margin-bottom: 0.25rem;
+    padding: 0.25rem 0;
+    opacity: 0.8;
+}
+
+.subsection:hover .subsection-title {
+    color: var(--primary-color);
+    opacity: 1;
+}
+
 .section-title {
     font-size: 0.9rem;
     font-weight: 500;

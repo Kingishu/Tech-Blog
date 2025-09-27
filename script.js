@@ -74,8 +74,7 @@ const observer = new IntersectionObserver((entries) => {
     });
 }, observerOptions);
 
-// 生成文章目录
-// 动态生成文章目录
+// 生成文章目录 - 支持三级目录结构
 function generateArticlesCatalog() {
     const catalogContent = document.querySelector('.catalog-content');
     if (!catalogContent) return;
@@ -108,6 +107,9 @@ function generateArticlesCatalog() {
             sectionTitle.className = 'section-title';
             sectionTitle.textContent = section.title;
 
+            sectionElement.appendChild(sectionTitle);
+
+            // 直接创建文章列表
             const articlesList = document.createElement('div');
             articlesList.className = 'catalog-articles';
 
@@ -145,7 +147,6 @@ function generateArticlesCatalog() {
                 articlesList.appendChild(articleLink);
             });
 
-            sectionElement.appendChild(sectionTitle);
             sectionElement.appendChild(articlesList);
             sectionsContainer.appendChild(sectionElement);
         });
@@ -155,7 +156,7 @@ function generateArticlesCatalog() {
     });
 }
 
-// 构建目录结构
+// 构建目录结构 - 支持二级目录：category-section
 function buildCatalogStructure(articles) {
     const catalog = {};
     const categoryIcons = {
@@ -164,6 +165,8 @@ function buildCatalogStructure(articles) {
         '测试内容': '🧪',
         '游戏开发': '🎯',
         '技术文章': '💻',
+        '算法与数据结构': '🧮',
+        '新技术分类': '🔬',
         '默认': '📝'
     };
 
@@ -197,7 +200,8 @@ function buildCatalogStructure(articles) {
     }));
 }
 
-// 计算分类下的文章总数
+
+// 计算分类下的文章总数 - 支持二级目录
 function getCategoryArticleCount(category) {
     let count = 0;
     category.sections.forEach(section => {
@@ -504,10 +508,55 @@ const articlesCatalog = [
 // 文章数据库配置（扁平化用于卡片显示）
 const articlesDatabase = [
     {
+        title: '456',
+        excerpt: '这是一个React入门教程，帮助初学者快速掌握React基础。',
+        category: '虚拟现实开发',
+        section: '核心系统',
+        date: '2025-09-27',
+        gradient: 'gradient-5',
+        link: 'article/456.html'
+    },
+    {
+        title: '123',
+        excerpt: '这是一个React入门教程，帮助初学者快速掌握React基础。',
+        category: 'Unity开发',
+        section: '核心系统',
+        date: '2025-09-27',
+        gradient: 'gradient-5',
+        link: 'article/123.html'
+    },
+    {
+        title: 'React入门教程',
+        excerpt: '这是一个React入门教程，帮助初学者快速掌握React基础。',
+        category: '前端开发',
+        section: 'React开发',
+        date: '2025-09-27',
+        gradient: 'gradient-5',
+        link: 'article/react入门教程.html'
+    },
+    {
+        title: '测试新分区创建',
+        excerpt: '这是一个测试文章，用于在现有分类中创建新分区的功能。',
+        category: '前端开发',
+        section: 'React开发',
+        date: '2025-09-27',
+        gradient: 'gradient-5',
+        link: 'article/测试新分区创建.html'
+    },
+    {
+        title: '测试自动目录创建',
+        excerpt: '这是一个测试文章，用于验证自动创建目录结构的功能是否正常工作。',
+        category: '新技术分类',
+        section: '实验性内容',
+        date: '2025-09-27',
+        gradient: 'gradient-5',
+        link: 'article/测试自动目录创建.html'
+    },
+    {
         title: '前端开发入门指南',
         excerpt: '为初学者提供的前端开发入门指南，涵盖HTML、CSS、JavaScript基础知识',
         category: '前端开发',
-        section: '技术文章',
+        section: '技术基础',
         date: '2025-09-27',
         gradient: 'gradient-5',
         link: 'article/前端开发入门指南.html'
@@ -525,7 +574,7 @@ const articlesDatabase = [
         title: 'md文档转atricle旧测试',
         excerpt: '这是一个测试文档，用于验证MD转Article功能是否正常工作，包括描述字段的显示效果。',
         category: '测试内容',
-        section: '默认分区',
+        section: '测试文章',
         date: '2025-09-27',
         gradient: 'gradient-5',
         link: 'article/md文档转atricle旧测试.html'
