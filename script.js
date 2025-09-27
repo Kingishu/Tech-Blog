@@ -186,6 +186,7 @@ const worksDatabase = [
         category: '游戏开发',
         date: '2024-01-20',
         video: 'https://www.bilibili.com/video/BV1rDMgzqE5v/?spm_id_from=333.1387.homepage.video_card.click',
+        cover: 'picture/王国之梦.jpg',
         tech: ['Unity', 'C#', 'PS'],
         description: '这是一个完整的2D卡牌游戏项目，使用Unity引擎开发。游戏包含的地图系统、卡牌对战系统、回合制系统,存储系统,充分展示了Unity游戏开发的全流程。',
         details: '项目包含5个关卡，20种敌人类型，完整的音效系统和UI界面。使用了Unity的PhysX物理引擎和Post-processing Stack来实现高质量的视觉效果。'
@@ -195,30 +196,11 @@ const worksDatabase = [
         excerpt: '基于Unity3D的射击小游戏',
         category: '游戏开发',
         date: '2024-01-15',
-        video: 'video/胶囊大作战项目展示.mp4',
+        video: 'https://www.bilibili.com/video/BV1RQarz6ExB/?spm_id_from=333.1387.homepage.video_card.click',
+        cover: 'picture/胶囊大作战.jpg',
         tech: ['Unity', 'C#', 'PS', 'Blender'],
         description: '一个功能完整的2.5D射击游戏,类吸血鬼幸存者玩法,玩家需要在平台内,击毙一定数量的敌人,进入下一关卡,在最后一关无尽模式中,取得更高的分数',
         details: '系统包含种子化地图生成,Fisher-Yates算法实现敌人随机生成,完整的武器系统,基于对象池的子弹,特效,音频管理系统。'
-    },
-    {
-        title: '移动端APP开发',
-        excerpt: '跨平台移动应用，支持iOS和Android双端',
-        category: '移动开发',
-        date: '2024-01-10',
-        video: 'https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4',
-        tech: ['React Native', 'TypeScript', 'Firebase'],
-        description: '使用React Native开发的跨平台移动应用，一次编码多端运行。应用具有流畅的用户体验和原生性能。',
-        details: '应用包含社交功能、实时聊天、地图定位等模块。使用了Firebase作为后端服务，支持推送通知和数据同步。'
-    },
-    {
-        title: 'AI机器学习项目',
-        excerpt: '基于深度学习的图像识别系统',
-        category: '人工智能',
-        date: '2024-01-05',
-        video: 'https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4',
-        tech: ['Python', 'TensorFlow', 'OpenCV', 'Docker'],
-        description: '使用深度学习技术开发的图像识别系统，能够准确识别多种物体和场景。项目包含数据预处理、模型训练和部署等完整流程。',
-        details: '系统准确率达到95%以上，支持实时图像识别和批量处理。使用了卷积神经网络(CNN)和数据增强技术。'
     }
 ];
 
@@ -310,9 +292,24 @@ function createWorkCard(work) {
     // 生成技术标签HTML
     const techTags = work.tech.map(tech => `<span class="tech-tag">${tech}</span>`).join('');
 
+    // 判断是否为B站链接
+    const isBilibiliLink = work.video.includes('bilibili.com');
+
+    // 创建可点击的卡片容器
+    if (isBilibiliLink) {
+        card.style.cursor = 'pointer';
+        card.addEventListener('click', () => {
+            window.open(work.video, '_blank');
+        });
+    }
+
     card.innerHTML = `
         <div class="video-container">
-            <video class="work-video" src="${work.video}" preload="metadata" controls></video>
+            ${isBilibiliLink ?
+            `<img class="work-cover" src="${work.cover}" alt="${work.title} 封面" onerror="this.src='https://via.placeholder.com/400x225/333/fff?text=${encodeURIComponent(work.title)}'">` :
+            `<video class="work-video" src="${work.video}" preload="metadata" controls></video>`
+        }
+            ${isBilibiliLink ? '<div class="play-overlay"><span class="play-icon">▶</span></div>' : ''}
         </div>
         <div class="work-content">
             <div class="work-meta">
