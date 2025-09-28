@@ -687,7 +687,7 @@ body {
 }
 
 .section-title {
-    font-size: 2.5rem;
+    font-size: 3.2rem;
     font-weight: 700;
     margin-bottom: 1rem;
     background: var(--gradient-2);
@@ -820,11 +820,20 @@ body {
 
 .category-count {
     background: var(--primary-color);
-    color: white;
+    color: white !important;
     font-size: 0.75rem;
     padding: 0.25rem 0.5rem;
     border-radius: 12px;
     font-weight: 500;
+    min-width: 1.3rem;
+    height: 1.3rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    -webkit-text-fill-color: white !important;
+    background-clip: border-box !important;
+    -webkit-background-clip: border-box !important;
 }
 
 .catalog-section {
@@ -853,13 +862,76 @@ body {
     opacity: 1;
 }
 
-.section-title {
+.catalog-section-title {
     font-size: 0.9rem;
     font-weight: 500;
     color: var(--text-secondary);
     margin-bottom: 0.5rem;
     padding: 0.5rem 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+}
+
+.catalog-section-title .section-text {
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    transition: var(--transition);
+}
+
+.catalog-section-title:hover {
+    transform: translateX(5px);
+}
+
+.catalog-section-title:hover .section-text {
+    background: linear-gradient(90deg, var(--secondary-color), var(--accent-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.section-toggle-icon {
+    display: inline-block;
+    margin-right: 0.5rem;
+    font-size: 0.8rem;
+    transition: transform 0.3s ease;
+    color: var(--primary-color);
+}
+
+.section-toggle-icon.collapsed {
+    transform: rotate(-90deg);
+}
+
+.section-text {
+    flex: 1;
+}
+
+.section-count {
+    background: var(--primary-color);
+    color: white !important;
+    font-size: 0.7rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 10px;
+    font-weight: 500;
+    opacity: 0.8;
+    transition: var(--transition);
+    min-width: 1.2rem;
+    height: 1.2rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    -webkit-text-fill-color: white !important;
+    background-clip: border-box !important;
+    -webkit-background-clip: border-box !important;
+}
+
+.catalog-section-title:hover .section-count {
+    opacity: 1;
+    background: var(--secondary-color);
 }
 
 .catalog-articles {
@@ -1409,7 +1481,7 @@ body {
     }
 
     .section-title {
-        font-size: 2rem;
+        font-size: 2.5rem;
     }
 
     .about-title {

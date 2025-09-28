@@ -104,14 +104,21 @@ function generateArticlesCatalog() {
             sectionElement.className = 'catalog-section';
 
             const sectionTitle = document.createElement('div');
-            sectionTitle.className = 'section-title';
-            sectionTitle.textContent = section.title;
+            sectionTitle.className = 'catalog-section-title';
+            sectionTitle.innerHTML = `
+                <span class="section-toggle-icon">▼</span>
+                <span class="section-text">${section.title}</span>
+                <span class="section-count">${section.articles.length}</span>
+            `;
+            sectionTitle.style.cursor = 'pointer';
+            sectionTitle.onclick = (e) => toggleSection(categoryIndex, sectionIndex);
 
             sectionElement.appendChild(sectionTitle);
 
             // 直接创建文章列表
             const articlesList = document.createElement('div');
             articlesList.className = 'catalog-articles';
+            articlesList.id = `category-${categoryIndex}-section-${sectionIndex}-articles`;
 
             section.articles.forEach((article, articleIndex) => {
                 const articleLink = document.createElement('a');
@@ -233,6 +240,47 @@ function toggleCategory(categoryIndex) {
         sectionsContainer.style.transform = 'translateY(-10px)';
         setTimeout(() => {
             sectionsContainer.style.display = 'none';
+        }, 300);
+    }
+}
+
+// 切换二级目录展开/收起
+function toggleSection(categoryIndex, sectionIndex) {
+    const articlesList = document.getElementById(`category-${categoryIndex}-section-${sectionIndex}-articles`);
+    const sectionElement = document.getElementById(`category-${categoryIndex}`).children[sectionIndex];
+    const toggleIcon = sectionElement ? sectionElement.querySelector('.section-toggle-icon') : null;
+
+    if (!articlesList) return;
+
+    const isHidden = articlesList.style.display === 'none';
+
+    // 切换显示状态
+    articlesList.style.display = isHidden ? 'flex' : 'none';
+
+    // 切换图标状态
+    if (toggleIcon) {
+        if (isHidden) {
+            toggleIcon.classList.remove('collapsed');
+        } else {
+            toggleIcon.classList.add('collapsed');
+        }
+    }
+
+    // 添加过渡动画
+    if (isHidden) {
+        articlesList.style.opacity = '0';
+        articlesList.style.transform = 'translateY(-10px)';
+        setTimeout(() => {
+            articlesList.style.transition = 'all 0.3s ease';
+            articlesList.style.opacity = '1';
+            articlesList.style.transform = 'translateY(0)';
+        }, 10);
+    } else {
+        articlesList.style.transition = 'all 0.3s ease';
+        articlesList.style.opacity = '0';
+        articlesList.style.transform = 'translateY(-10px)';
+        setTimeout(() => {
+            articlesList.style.display = 'none';
         }, 300);
     }
 }
@@ -508,11 +556,20 @@ const articlesCatalog = [
 // 文章数据库配置（扁平化用于卡片显示）
 const articlesDatabase = [
     {
+        title: '十五十六十七',
+        excerpt: '这是一个React入门教程，帮助初学者快速掌握React基础。',
+        category: 'Unity开发',
+        section: '不核心系统',
+        date: '2025-09-28',
+        gradient: 'gradient-5',
+        link: 'article/十五十六十七.html'
+    },
+    {
         title: '789',
         excerpt: '这是一个React入门教程，帮助初学者快速掌握React基础。',
         category: '虚拟现实开发',
         section: '核心系统',
-        date: '2025-09-27',
+        date: '2025-09-28',
         gradient: 'gradient-5',
         link: 'article/789.html'
     },
@@ -521,7 +578,7 @@ const articlesDatabase = [
         excerpt: '这是一个React入门教程，帮助初学者快速掌握React基础。',
         category: '虚拟现实开发',
         section: '核心系统',
-        date: '2025-09-27',
+        date: '2025-09-28',
         gradient: 'gradient-5',
         link: 'article/十十一十二.html'
     },
@@ -530,7 +587,7 @@ const articlesDatabase = [
         excerpt: '这是一个React入门教程，帮助初学者快速掌握React基础。',
         category: '虚拟现实开发',
         section: '核心系统',
-        date: '2025-09-27',
+        date: '2025-09-28',
         gradient: 'gradient-5',
         link: 'article/456.html'
     },
@@ -539,7 +596,7 @@ const articlesDatabase = [
         excerpt: '这是一个React入门教程，帮助初学者快速掌握React基础。',
         category: 'Unity开发',
         section: '核心系统',
-        date: '2025-09-27',
+        date: '2025-09-28',
         gradient: 'gradient-5',
         link: 'article/123.html'
     },
@@ -548,7 +605,7 @@ const articlesDatabase = [
         excerpt: '这是一个React入门教程，帮助初学者快速掌握React基础。',
         category: '前端开发',
         section: 'React开发',
-        date: '2025-09-27',
+        date: '2025-09-28',
         gradient: 'gradient-5',
         link: 'article/react入门教程.html'
     },
@@ -557,7 +614,7 @@ const articlesDatabase = [
         excerpt: '这是一个测试文章，用于在现有分类中创建新分区的功能。',
         category: '前端开发',
         section: 'React开发',
-        date: '2025-09-27',
+        date: '2025-09-28',
         gradient: 'gradient-5',
         link: 'article/测试新分区创建.html'
     },
@@ -566,7 +623,7 @@ const articlesDatabase = [
         excerpt: '这是一个测试文章，用于验证自动创建目录结构的功能是否正常工作。',
         category: '新技术分类',
         section: '实验性内容',
-        date: '2025-09-27',
+        date: '2025-09-28',
         gradient: 'gradient-5',
         link: 'article/测试自动目录创建.html'
     },
@@ -575,7 +632,7 @@ const articlesDatabase = [
         excerpt: '为初学者提供的前端开发入门指南，涵盖HTML、CSS、JavaScript基础知识',
         category: '前端开发',
         section: '技术基础',
-        date: '2025-09-27',
+        date: '2025-09-28',
         gradient: 'gradient-5',
         link: 'article/前端开发入门指南.html'
     },
@@ -584,7 +641,7 @@ const articlesDatabase = [
         excerpt: '对象池技术是一种复用技术,可以大幅度提高频繁删除创建造成的性能问题',
         category: 'Unity开发',
         section: '核心系统',
-        date: '2025-09-27',
+        date: '2025-09-28',
         gradient: 'gradient-5',
         link: 'article/对象池技术.html'
     },
@@ -593,7 +650,7 @@ const articlesDatabase = [
         excerpt: '这是一个测试文档，用于验证MD转Article功能是否正常工作，包括描述字段的显示效果。',
         category: '测试内容',
         section: '测试文章',
-        date: '2025-09-27',
+        date: '2025-09-28',
         gradient: 'gradient-5',
         link: 'article/md文档转atricle旧测试.html'
     }
