@@ -556,6 +556,24 @@ const articlesCatalog = [
 // 文章数据库配置（扁平化用于卡片显示）
 const articlesDatabase = [
     {
+        title: '对象池测试3',
+        excerpt: '对象池技术是一种复用技术,可以大幅度提高频繁删除创建造成的性能问题',
+        category: 'Unity开发',
+        section: '核心系统',
+        date: '2025-09-28',
+        gradient: 'gradient-5',
+        link: 'article/对象池测试3.html'
+    },
+    {
+        title: '这是一个测试案例',
+        excerpt: '这是一个React入门教程，帮助初学者快速掌握React基础。',
+        category: 'Unity开发',
+        section: '不核心系统',
+        date: '2025-09-28',
+        gradient: 'gradient-5',
+        link: 'article/这是一个测试案例.html'
+    },
+    {
         title: '对象池2',
         excerpt: '对象池技术是一种复用技术,可以大幅度提高频繁删除创建造成的性能问题',
         category: '网页开发',
