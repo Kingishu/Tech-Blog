@@ -759,6 +759,53 @@ html {
     transform: translateX(5px);
 }
 
+/* 新增文章卡片样式 */
+.article-section {
+    background: rgba(255, 59, 48, 0.1);
+    color: var(--accent-color);
+    padding: 0.25rem 0.75rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.article-read-time {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    backdrop-filter: blur(10px);
+    z-index: 2;
+}
+
+.article-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 1.5rem;
+}
+
+.article-read-time-badge {
+    background: rgba(0, 122, 255, 0.1);
+    color: var(--primary-color);
+    padding: 0.3rem 0.8rem;
+    border-radius: 15px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    border: 1px solid rgba(0, 122, 255, 0.2);
+    transition: var(--transition);
+}
+
+.article-link:hover {
+    color: var(--secondary-color);
+    transform: translateX(5px);
+}
+
 /* ==============================================
    10. About 区域样式
    ============================================== */
@@ -1577,7 +1624,7 @@ html {
 
 .search-input {
     width: 100%;
-    padding: 0.875rem 1rem 0.875rem 3rem;
+    padding: 0.875rem 3rem 0.875rem 3rem;
     background: var(--background-color);
     border: 1px solid var(--border-color);
     border-radius: 12px;
@@ -1597,21 +1644,54 @@ html {
     color: var(--text-tertiary);
 }
 
-.search-clear, .search-close {
+.search-clear {
+    position: absolute;
+    right: 0.75rem;
     background: none;
     border: none;
     color: var(--text-tertiary);
-    font-size: 1.2rem;
-    padding: 0.5rem;
+    font-size: 1.1rem;
+    padding: 0.4rem;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: var(--transition);
+    opacity: 0;
+    visibility: hidden;
+}
+
+.search-clear:hover {
+    background: rgba(0, 122, 255, 0.1);
+    color: var(--primary-color);
+}
+
+.search-clear.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.search-separator {
+    width: 1px;
+    height: 2.5rem;
+    background: var(--border-color);
+    margin: 0 1rem;
+}
+
+.search-close {
+    background: rgba(255, 59, 48, 0.1);
+    border: 1px solid rgba(255, 59, 48, 0.2);
+    color: var(--accent-color);
+    font-size: 1.1rem;
+    padding: 0.6rem 0.8rem;
     cursor: pointer;
     border-radius: 8px;
     transition: var(--transition);
-    margin-left: 0.5rem;
+    font-weight: 500;
 }
 
-.search-clear:hover, .search-close:hover {
-    background: var(--background-color);
-    color: var(--text-primary);
+.search-close:hover {
+    background: rgba(255, 59, 48, 0.2);
+    color: var(--accent-color);
+    transform: scale(1.05);
 }
 
 /* 搜索内容 */
@@ -1781,13 +1861,22 @@ html {
     flex-wrap: wrap;
 }
 
-.result-category, .result-section, .result-date {
+.result-category, .result-section, .result-date, .result-read-time {
     color: var(--text-tertiary);
     font-size: 0.85rem;
 }
 
 .result-category {
     font-weight: 500;
+}
+
+.result-read-time {
+    background: rgba(0, 122, 255, 0.1);
+    color: var(--primary-color);
+    padding: 0.2rem 0.5rem;
+    border-radius: 12px;
+    font-weight: 500;
+    border: 1px solid rgba(0, 122, 255, 0.2);
 }
 
 /* 高亮文本 */

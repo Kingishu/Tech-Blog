@@ -2,6 +2,72 @@ const fs = require('fs');
 const path = require('path');
 const { marked } = require('marked');
 
+// 计算阅读时间函数
+function calculateReadingTime(content) {
+    // 移除代码块、链接、图片等非文本内容
+    const cleanContent = content
+        .replace(/```[\s\S]*?```/g, '') // 移除代码块
+        .replace(/`[^`]*`/g, '') // 移除内联代码
+        .replace(/!\[.*?\]\(.*?\)/g, '') // 移除图片
+        .replace(/\[.*?\]\(.*?\)/g, '$1') // 移除链接，保留文本
+        .replace(/#{1,6}\s+/g, '') // 移除标题标记
+        .replace(/\*\*(.*?)\*\*/g, '$1') // 移除粗体标记
+        .replace(/\*(.*?)\*/g, '$1') // 移除斜体标记
+        .replace(/`(.*?)`/g, '$1') // 移除行内代码标记
+        .replace(/^\s*[-*+]\s+/gm, '') // 移除列表标记
+        .replace(/^\s*\d+\.\s+/gm, '') // 移除有序列表标记
+        .replace(/^\s*>\s+/gm, '') // 移除引用标记
+        .replace(/\n{3,}/g, '\n\n'); // 规范化换行
+
+    // 计算中文字符数
+    const chineseChars = (cleanContent.match(/[\u4e00-\u9fa5]/g) || []).length;
+
+    // 计算英文单词数
+    const englishWords = (cleanContent.match(/[a-zA-Z]+/g) || []).length;
+
+    // 代码块数量（每行代码需要更多时间）
+    const codeBlocks = (content.match(/```[\s\S]*?```/g) || []).length;
+    const codeLines = (content.match(/```[\s\S]*?```/g) || [])
+        .reduce((total, block) => total + block.split('\n').length, 0);
+
+    // 阅读速度参数（每分钟）
+    const chineseSpeed = 500; // 中文每分钟阅读字数
+    const englishSpeed = 200; // 英文每分钟阅读单词数
+    const codeSpeed = 50; // 代码每分钟阅读行数
+
+    // 计算各部分阅读时间
+    const chineseTime = chineseChars / chineseSpeed;
+    const englishTime = englishWords / englishSpeed;
+    const codeTime = codeLines / codeSpeed;
+
+    // 基础阅读时间（分钟）
+    let totalTime = chineseTime + englishTime + codeTime;
+
+    // 图片阅读时间（每张图片额外需要15秒）
+    const images = (content.match(/!\[.*?\]\(.*?\)/g) || []).length;
+    totalTime += images * 0.25; // 15秒 = 0.25分钟
+
+    // 表格阅读时间（每个表格额外需要30秒）
+    const tables = (content.match(/\|[\s\S]*?\|/g) || []).length;
+    totalTime += tables * 0.5; // 30秒 = 0.5分钟
+
+    // 向上取整并添加缓冲时间
+    const finalTime = Math.ceil(totalTime * 1.1); // 增加10%的缓冲时间
+
+    // 格式化输出
+    if (finalTime < 1) {
+        return '1分钟以内';
+    } else if (finalTime <= 5) {
+        return `${Math.ceil(finalTime)}分钟`;
+    } else if (finalTime <= 15) {
+        return `${Math.ceil(finalTime)}分钟`;
+    } else if (finalTime <= 30) {
+        return `${Math.ceil(finalTime / 5) * 5}分钟`;
+    } else {
+        return `${Math.ceil(finalTime / 10) * 10}分钟`;
+    }
+}
+
 // 配置项
 const config = {
     sourceDir: './md-articles',          // MD文档目录
@@ -59,9 +125,8 @@ function parseMarkdownMetadata(content) {
             metadata.excerpt = metadata.excerpt || firstParagraph.substring(0, 100) + '...';
         }
 
-        // 计算阅读时间
-        const wordCount = markdownContent.split(/\s+/).length;
-        metadata.readTime = Math.ceil(wordCount / 200) + '分钟';
+        // 计算阅读时间 - 优化算法
+        metadata.readTime = calculateReadingTime(markdownContent);
 
         return { metadata, content: markdownContent };
     }
@@ -82,8 +147,14 @@ function parseMarkdownMetadata(content) {
             metadata.excerpt = firstParagraph.substring(0, 100) + '...';
         }
 
+        // 计算阅读时间 - 优化算法
+        metadata.readTime = calculateReadingTime(contentWithoutTitle);
+
         return { metadata, content: contentWithoutTitle };
     }
+
+    // 最后的备用方案：计算全文阅读时间
+    metadata.readTime = calculateReadingTime(content);
 
     return { metadata, content };
 }
@@ -803,7 +874,8 @@ function updateArticlesData(metadata, fileName) {
             section: metadata.section,
             date: metadata.date,
             gradient: metadata.gradient,
-            link: articlePath
+            link: articlePath,
+            readTime: metadata.readTime
         };
 
         if (articleIndex >= 0) {

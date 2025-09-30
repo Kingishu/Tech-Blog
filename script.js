@@ -562,7 +562,8 @@ const articlesDatabase = [
         section: '数据持久化',
         date: '2025-09-30',
         gradient: 'gradient-5',
-        link: 'article/c-对象的序列化与反序列化.html'
+        link: 'article/c-对象的序列化与反序列化.html',
+        readTime: '4分钟'
     },
     {
         title: 'FileStream文件流',
@@ -571,7 +572,8 @@ const articlesDatabase = [
         section: '数据持久化',
         date: '2025-09-30',
         gradient: 'gradient-5',
-        link: 'article/filestream文件流.html'
+        link: 'article/filestream文件流.html',
+        readTime: '4分钟'
     }
 ];
 
@@ -1024,13 +1026,35 @@ class SearchEngine {
         // 清除搜索
         this.searchClear.addEventListener('click', () => this.clearSearch());
 
-        // 搜索输入事件
+        // 搜索输入事件 - 动态显示/隐藏清除按钮
         let searchTimeout;
         this.searchInput.addEventListener('input', (e) => {
             clearTimeout(searchTimeout);
+
+            // 动态显示/隐藏清除按钮
+            if (e.target.value.trim()) {
+                this.searchClear.classList.add('visible');
+            } else {
+                this.searchClear.classList.remove('visible');
+            }
+
             searchTimeout = setTimeout(() => {
                 this.performSearch(e.target.value);
             }, 300);
+        });
+
+        // 搜索框获得焦点时检查内容
+        this.searchInput.addEventListener('focus', (e) => {
+            if (e.target.value.trim()) {
+                this.searchClear.classList.add('visible');
+            }
+        });
+
+        // 搜索框失去焦点时隐藏清除按钮
+        this.searchInput.addEventListener('blur', () => {
+            setTimeout(() => {
+                this.searchClear.classList.remove('visible');
+            }, 200); // 延迟隐藏，允许点击清除按钮
         });
 
         // 键盘快捷键
@@ -1215,6 +1239,7 @@ class SearchEngine {
                     <span class="result-category">${result.category || '技术'}</span>
                     ${result.section ? `<span class="result-section">${result.section}</span>` : ''}
                     ${result.date ? `<span class="result-date">${result.date}</span>` : ''}
+                    ${result.readTime ? `<span class="result-read-time">⏱️ ${result.readTime}</span>` : ''}
                 </div>
             </div>
         `;
