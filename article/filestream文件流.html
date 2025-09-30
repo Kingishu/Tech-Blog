@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>123 - Tech Blog</title>
+    <title>FileStream文件流 - Tech Blog</title>
     <link rel="stylesheet" href="../styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
@@ -386,11 +386,11 @@
     <article>
         <div class="article-header">
             <div class="container">
-                  <h1 class="article-title">123</h1>
+                  <h1 class="article-title">FileStream文件流</h1>
                 <div class="article-meta">
-                    <span>📅 2025-09-28</span>
-                    <span>🏷️ Unity开发-核心系统</span>
-                    <span>⏱️ 阅读时间：1分钟</span>
+                    <span>📅 2025-09-30</span>
+                    <span>🏷️ Unity笔记-数据持久化</span>
+                    <span>⏱️ 阅读时间：2分钟</span>
                     <span>👤 Kingishu</span>
                 </div>
             </div>
@@ -400,41 +400,168 @@
             <div class="container">
                 <div class="article-layout">
                     <div class="article-body">
-                        <h1 id="heading-react入门教程">React入门教程</h1>
-<p>这是一个全面的React入门教程，帮助初学者快速掌握React基础。</p>
-<h2 id="heading-什么是react">什么是React</h2>
-<p>React是一个用于构建用户界面的JavaScript库，由Facebook开发并维护。</p>
-<h2 id="heading-核心概念">核心概念</h2>
-<h3 id="heading-组件">组件</h3>
-<p>React应用由组件构成，组件是可复用的UI单元。</p>
-<h3 id="heading-jsx">JSX</h3>
-<p>JSX是React的语法扩展，允许在JavaScript中编写HTML-like代码。</p>
-<h3 id="heading-状态和属性">状态和属性</h3>
-<ul>
-<li>状态(State)：组件内部的数据</li>
-<li>属性(Props)：组件间的数据传递</li>
-</ul>
-<h2 id="heading-代码示例">代码示例</h2>
-<pre><code class="language-javascript">import React from &#39;react&#39;;
-
-function Welcome(props) {
-    return &lt;h1&gt;Hello, {props.name}!&lt;/h1&gt;;
-}
-
-export default Welcome;
+                        <h2 id="heading-打开或创建指定文件">打开或创建指定文件</h2>
+<h3 id="heading-1-使用-filestream-构造函数">1. 使用 FileStream 构造函数</h3>
+<p>通过构造函数创建文件流，提供完整的控制选项：</p>
+<p>csharp</p>
+<pre><code>// 创建可读写文件流，允许其他进程读取
+FileStream fs = new FileStream(
+    Application.persistentDataPath + &quot;/Student/&quot; + filename + &quot;.txt&quot;,
+    FileMode.OpenOrCreate,
+    FileAccess.ReadWrite,
+    FileShare.Read
+);
 </code></pre>
-<h2 id="heading-学习路径">学习路径</h2>
+<p><strong>参数说明：</strong></p>
+<ul>
+<li><strong>路径</strong>：文件在系统中的完整路径</li>
+<li><strong>打开模式</strong> (FileMode)：<ul>
+<li><code>CreateNew</code>：创建新文件，如果文件已存在则抛出异常</li>
+<li><code>Create</code>：创建文件，如果文件存在则覆盖</li>
+<li><code>Open</code>：打开现有文件，如果文件不存在则抛出异常</li>
+<li><code>OpenOrCreate</code>：打开文件（存在时）或创建新文件（不存在时）</li>
+<li><code>Append</code>：打开文件并定位到文件末尾，或创建新文件</li>
+<li><code>Truncate</code>：打开现有文件并立即清空内容</li>
+</ul>
+</li>
+<li><strong>访问模式</strong> (FileAccess)：<ul>
+<li><code>Read</code>：只读访问</li>
+<li><code>Write</code>：只写访问</li>
+<li><code>ReadWrite</code>：读写访问</li>
+</ul>
+</li>
+<li><strong>共享权限</strong> (FileShare)：<ul>
+<li><code>None</code>：完全禁止共享</li>
+<li><code>Read</code>：允许其他进程读取</li>
+<li><code>Write</code>：允许其他进程写入</li>
+<li><code>ReadWrite</code>：允许其他进程读写</li>
+</ul>
+</li>
+</ul>
+<h3 id="heading-2-使用-fileopen-方法">2. 使用 File.Open 方法</h3>
+<p>csharp</p>
+<pre><code>// 以只读方式打开文件
+FileStream fs = File.Open(
+    Application.persistentDataPath + &quot;/Student/&quot; + filename + &quot;.txt&quot;,
+    FileMode.Open,
+    FileAccess.Read
+);
+</code></pre>
+<p>此方法与构造函数参数相同，提供更简洁的语法。</p>
+<h3 id="heading-3-使用-filecreate-方法">3. 使用 File.Create 方法</h3>
+<p>csharp</p>
+<pre><code>// 创建文件并指定缓冲区大小
+FileStream fs = File.Create(
+    Application.persistentDataPath + &quot;/Student.txt&quot;, 
+    2048  // 缓冲区大小(字节)
+);
+</code></pre>
+<p><strong>参数说明：</strong></p>
+<ul>
+<li><strong>路径</strong>：要创建的文件路径</li>
+<li><strong>缓冲区大小</strong>：文件流的缓冲区大小，适当设置可优化I/O性能</li>
+</ul>
+<h2 id="heading-写入文件操作">写入文件操作</h2>
+<p>FileStream 以字节为单位操作文件，需要将数据转换为字节数组后写入。</p>
+<h3 id="heading-写入基本数据类型">写入基本数据类型</h3>
+<p>csharp</p>
+<pre><code>// 写入整数
+int number = 100;
+byte[] intBytes = BitConverter.GetBytes(number);
+fs.Write(intBytes, 0, 4);
+
+// 写入浮点数
+float score = 95.5f;
+byte[] floatBytes = BitConverter.GetBytes(score);
+fs.Write(floatBytes, 0, 4);
+
+// 写入布尔值
+bool isPass = true;
+byte[] boolBytes = BitConverter.GetBytes(isPass);
+fs.Write(boolBytes, 0, 1);
+</code></pre>
+<p><strong>Write 方法参数：</strong></p>
+<ul>
+<li><strong>buffer</strong>：要写入的字节数组</li>
+<li><strong>offset</strong>：从字节数组的哪个位置开始写入</li>
+<li><strong>count</strong>：写入的字节数量</li>
+</ul>
+<h3 id="heading-写入字符串类型">写入字符串类型</h3>
+<p>字符串长度可变，需要特殊处理：</p>
+<p>csharp</p>
+<pre><code>string name = &quot;秦豪凯&quot;;
+byte[] stringBytes = Encoding.UTF8.GetBytes(name);
+
+// 先写入字符串长度（4字节整数）
+byte[] lengthBytes = BitConverter.GetBytes(stringBytes.Length);
+fs.Write(lengthBytes, 0, 4);
+
+// 再写入字符串内容
+fs.Write(stringBytes, 0, stringBytes.Length);
+</code></pre>
+<p><strong>写入顺序：</strong></p>
 <ol>
-<li>理解React基础概念</li>
-<li>学习组件和JSX</li>
-<li>掌握状态管理</li>
-<li>学习生命周期和Hooks</li>
-<li>实践项目开发</li>
+<li>将字符串转换为字节数组</li>
+<li>写入字节数组长度（4字节）</li>
+<li>写入字符串字节数据</li>
 </ol>
-<blockquote>
-<p>这个教程适合有一定JavaScript基础的初学者。</p>
-</blockquote>
-<p>祝你学习愉快！</p>
+<h2 id="heading-读取文件操作">读取文件操作</h2>
+<p>读取时需要按照写入时的格式和顺序进行解析：</p>
+<p>csharp</p>
+<pre><code>using (FileStream fs = File.Open(
+    Application.persistentDataPath + &quot;/Student/&quot; + filename + &quot;.txt&quot;,
+    FileMode.Open, 
+    FileAccess.Read))
+{
+    byte[] fileBytes = new byte[fs.Length];
+    fs.Read(fileBytes, 0, fileBytes.Length);
+    
+    int index = 0;
+    Student student = new Student();
+    
+    // 读取ID（4字节整数）
+    student.id = BitConverter.ToInt32(fileBytes, index);
+    index += 4;
+    
+    // 读取字符串长度（4字节整数）
+    int nameLength = BitConverter.ToInt32(fileBytes, index);
+    index += 4;
+    
+    // 读取字符串内容
+    student.name = Encoding.UTF8.GetString(fileBytes, index, nameLength);
+    index += nameLength;
+    
+    // 读取分数（4字节浮点数）
+    student.score = BitConverter.ToSingle(fileBytes, index);
+    index += 4;
+    
+    // 读取是否通过（1字节布尔值）
+    student.pass = BitConverter.ToBoolean(fileBytes, index);
+    
+    return student;
+}
+</code></pre>
+<h2 id="heading-最佳实践">最佳实践</h2>
+<ol>
+<li><strong>使用 using 语句</strong>确保资源正确释放</li>
+<li><strong>异常处理</strong>：捕获可能出现的 IOException 等异常</li>
+<li><strong>缓冲区大小</strong>：根据文件大小合理设置缓冲区</li>
+<li><strong>编码一致性</strong>：读写时使用相同的字符编码</li>
+</ol>
+<p>csharp</p>
+<pre><code>try
+{
+    using (FileStream fs = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite))
+    {
+        // 文件操作代码
+    }
+}
+catch (IOException ex)
+{
+    Debug.LogError($&quot;文件操作失败: {ex.Message}&quot;);
+}
+</code></pre>
+<p>通过以上方法，您可以高效地进行文件读写操作，确保数据的完整性和一致性。</p>
 
                     </div>
 
@@ -442,13 +569,15 @@ export default Welcome;
                     <div class="article-sidebar">
                         <div class="toc">
                             <h3>目录</h3>
-                            <ul><li><a href="#heading-什么是react">什么是React</a></li>
-<li><a href="#heading-核心概念">核心概念</a></li>
-    <li><a href="#heading-组件">组件</a></li>
-    <li><a href="#heading-jsx">JSX</a></li>
-    <li><a href="#heading-状态和属性">状态和属性</a></li>
-<li><a href="#heading-代码示例">代码示例</a></li>
-<li><a href="#heading-学习路径">学习路径</a></li></ul>
+                            <ul><li><a href="#heading-打开或创建指定文件">打开或创建指定文件</a></li>
+    <li><a href="#heading-1-使用-filestream-构造函数">1. 使用 FileStream 构造函数</a></li>
+    <li><a href="#heading-2-使用-fileopen-方法">2. 使用 File.Open 方法</a></li>
+    <li><a href="#heading-3-使用-filecreate-方法">3. 使用 File.Create 方法</a></li>
+<li><a href="#heading-写入文件操作">写入文件操作</a></li>
+    <li><a href="#heading-写入基本数据类型">写入基本数据类型</a></li>
+    <li><a href="#heading-写入字符串类型">写入字符串类型</a></li>
+<li><a href="#heading-读取文件操作">读取文件操作</a></li>
+<li><a href="#heading-最佳实践">最佳实践</a></li></ul>
                         </div>
                     </div>
                     

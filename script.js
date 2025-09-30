@@ -556,130 +556,22 @@ const articlesCatalog = [
 // 文章数据库配置（扁平化用于卡片显示）
 const articlesDatabase = [
     {
-        title: '对象池测试3',
-        excerpt: '对象池技术是一种复用技术,可以大幅度提高频繁删除创建造成的性能问题',
-        category: 'Unity开发',
-        section: '核心系统',
-        date: '2025-09-28',
+        title: 'C#对象的序列化与反序列化',
+        excerpt: 'FileStream文件流相关操作',
+        category: 'Unity笔记',
+        section: '数据持久化',
+        date: '2025-09-30',
         gradient: 'gradient-5',
-        link: 'article/对象池测试3.html'
+        link: 'article/c-对象的序列化与反序列化.html'
     },
     {
-        title: '这是一个测试案例',
-        excerpt: '这是一个React入门教程，帮助初学者快速掌握React基础。',
-        category: 'Unity开发',
-        section: '不核心系统',
-        date: '2025-09-28',
+        title: 'FileStream文件流',
+        excerpt: 'FileStream文件流相关操作',
+        category: 'Unity笔记',
+        section: '数据持久化',
+        date: '2025-09-30',
         gradient: 'gradient-5',
-        link: 'article/这是一个测试案例.html'
-    },
-    {
-        title: '对象池2',
-        excerpt: '对象池技术是一种复用技术,可以大幅度提高频繁删除创建造成的性能问题',
-        category: '网页开发',
-        section: '测试内容',
-        date: '2025-09-28',
-        gradient: 'gradient-5',
-        link: 'article/对象池2.html'
-    },
-    {
-        title: '十五十六十七',
-        excerpt: '这是一个React入门教程，帮助初学者快速掌握React基础。',
-        category: 'Unity开发',
-        section: '不核心系统',
-        date: '2025-09-28',
-        gradient: 'gradient-5',
-        link: 'article/十五十六十七.html'
-    },
-    {
-        title: '789',
-        excerpt: '这是一个React入门教程，帮助初学者快速掌握React基础。',
-        category: '虚拟现实开发',
-        section: '核心系统',
-        date: '2025-09-28',
-        gradient: 'gradient-5',
-        link: 'article/789.html'
-    },
-    {
-        title: '十十一十二',
-        excerpt: '这是一个React入门教程，帮助初学者快速掌握React基础。',
-        category: '虚拟现实开发',
-        section: '核心系统',
-        date: '2025-09-28',
-        gradient: 'gradient-5',
-        link: 'article/十十一十二.html'
-    },
-    {
-        title: '456',
-        excerpt: '这是一个React入门教程，帮助初学者快速掌握React基础。',
-        category: '虚拟现实开发',
-        section: '核心系统',
-        date: '2025-09-28',
-        gradient: 'gradient-5',
-        link: 'article/456.html'
-    },
-    {
-        title: '123',
-        excerpt: '这是一个React入门教程，帮助初学者快速掌握React基础。',
-        category: 'Unity开发',
-        section: '核心系统',
-        date: '2025-09-28',
-        gradient: 'gradient-5',
-        link: 'article/123.html'
-    },
-    {
-        title: 'React入门教程',
-        excerpt: '这是一个React入门教程，帮助初学者快速掌握React基础。',
-        category: '前端开发',
-        section: 'React开发',
-        date: '2025-09-28',
-        gradient: 'gradient-5',
-        link: 'article/react入门教程.html'
-    },
-    {
-        title: '测试新分区创建',
-        excerpt: '这是一个测试文章，用于在现有分类中创建新分区的功能。',
-        category: '前端开发',
-        section: 'React开发',
-        date: '2025-09-28',
-        gradient: 'gradient-5',
-        link: 'article/测试新分区创建.html'
-    },
-    {
-        title: '测试自动目录创建',
-        excerpt: '这是一个测试文章，用于验证自动创建目录结构的功能是否正常工作。',
-        category: '新技术分类',
-        section: '实验性内容',
-        date: '2025-09-28',
-        gradient: 'gradient-5',
-        link: 'article/测试自动目录创建.html'
-    },
-    {
-        title: '前端开发入门指南',
-        excerpt: '为初学者提供的前端开发入门指南，涵盖HTML、CSS、JavaScript基础知识',
-        category: '前端开发',
-        section: '技术基础',
-        date: '2025-09-28',
-        gradient: 'gradient-5',
-        link: 'article/前端开发入门指南.html'
-    },
-    {
-        title: '对象池技术',
-        excerpt: '对象池技术是一种复用技术,可以大幅度提高频繁删除创建造成的性能问题',
-        category: 'Unity开发',
-        section: '核心系统',
-        date: '2025-09-28',
-        gradient: 'gradient-5',
-        link: 'article/对象池技术.html'
-    },
-    {
-        title: 'md文档转atricle旧测试',
-        excerpt: '这是一个测试文档，用于验证MD转Article功能是否正常工作，包括描述字段的显示效果。',
-        category: '测试内容',
-        section: '测试文章',
-        date: '2025-09-28',
-        gradient: 'gradient-5',
-        link: 'article/md文档转atricle旧测试.html'
+        link: 'article/filestream文件流.html'
     }
 ];
 
@@ -1048,9 +940,388 @@ function initializeTooltips() {
     });
 }
 
+// ==================== 搜索功能 ====================
+// 搜索功能实现
+class SearchEngine {
+    constructor() {
+        this.searchModal = document.getElementById('searchModal');
+        this.searchInput = document.getElementById('searchInput');
+        this.searchClear = document.getElementById('searchClear');
+        this.searchClose = document.getElementById('searchClose');
+        this.searchOverlay = document.getElementById('searchOverlay');
+        this.searchResults = document.getElementById('searchResults');
+        this.searchPlaceholder = document.getElementById('searchPlaceholder');
+        this.resultsList = document.getElementById('resultsList');
+        this.resultsHeader = document.getElementById('resultsHeader');
+
+        this.searchIndex = this.buildSearchIndex();
+        this.initializeSearch();
+    }
+
+    // 构建搜索索引
+    buildSearchIndex() {
+        const searchIndex = [];
+
+        console.log('开始构建搜索索引...');
+
+        // 添加文章到搜索索引
+        if (typeof articlesDatabase !== 'undefined') {
+            console.log(`添加 ${articlesDatabase.length} 篇文章到搜索索引`);
+            articlesDatabase.forEach((article, articleIndex) => {
+                searchIndex.push({
+                    ...article,
+                    searchableText: `${article.title} ${article.excerpt} ${article.category} ${article.section}`.toLowerCase()
+                });
+            });
+        } else {
+            console.log('articlesDatabase 未定义');
+        }
+
+        // 添加作品到搜索索引
+        if (typeof worksDatabase !== 'undefined') {
+            console.log(`添加 ${worksDatabase.length} 个作品到搜索索引`);
+            worksDatabase.forEach((work, workIndex) => {
+                // 安全地处理tags属性
+                const tagsText = (work.tags && Array.isArray(work.tags)) ? work.tags.join(' ') : '';
+                console.log(`处理作品 ${workIndex}: ${work.title}, tags:`, work.tags);
+
+                searchIndex.push({
+                    ...work,
+                    searchableText: `${work.title} ${work.description} ${tagsText}`.toLowerCase(),
+                    type: 'work'
+                });
+            });
+        } else {
+            console.log('worksDatabase 未定义');
+        }
+
+        console.log(`搜索索引构建完成，共 ${searchIndex.length} 项`);
+        return searchIndex;
+    }
+
+    // 初始化搜索功能
+    initializeSearch() {
+        // 检查所有必要的元素是否存在
+        if (!this.searchModal || !this.searchInput || !this.searchClear ||
+            !this.searchClose || !this.searchOverlay || !this.searchResults ||
+            !this.searchPlaceholder || !this.resultsList || !this.resultsHeader) {
+            console.error('搜索功能所需元素未找到');
+            return;
+        }
+
+        // 搜索按钮点击事件
+        const searchBtn = document.getElementById('searchBtn');
+        if (searchBtn) {
+            searchBtn.addEventListener('click', () => this.openSearch());
+        } else {
+            console.error('搜索按钮未找到');
+        }
+
+        // 关闭搜索
+        this.searchClose.addEventListener('click', () => this.closeSearch());
+        this.searchOverlay.addEventListener('click', () => this.closeSearch());
+
+        // 清除搜索
+        this.searchClear.addEventListener('click', () => this.clearSearch());
+
+        // 搜索输入事件
+        let searchTimeout;
+        this.searchInput.addEventListener('input', (e) => {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                this.performSearch(e.target.value);
+            }, 300);
+        });
+
+        // 键盘快捷键
+        document.addEventListener('keydown', (e) => {
+            // Ctrl/Cmd + K 打开搜索
+            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                e.preventDefault();
+                this.openSearch();
+            }
+
+            // ESC 关闭搜索
+            if (e.key === 'Escape' && this.searchModal && this.searchModal.classList.contains('active')) {
+                this.closeSearch();
+            }
+        });
+    }
+
+    // 打开搜索界面
+    openSearch() {
+        this.searchModal.classList.add('active');
+        this.searchInput.value = '';
+        this.clearSearch();
+        setTimeout(() => {
+            this.searchInput.focus();
+        }, 100);
+        document.body.style.overflow = 'hidden';
+    }
+
+    // 关闭搜索界面
+    closeSearch() {
+        this.searchModal.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    // 清除搜索
+    clearSearch() {
+        this.searchInput.value = '';
+        this.searchResults.style.display = 'none';
+        this.searchPlaceholder.style.display = 'block';
+        this.resultsList.innerHTML = '';
+    }
+
+    // 执行搜索
+    performSearch(query) {
+        if (!query.trim()) {
+            this.clearSearch();
+            return;
+        }
+
+        const results = this.search(query);
+        this.displayResults(results, query);
+    }
+
+    // 搜索算法
+    search(query) {
+        const searchTerm = query.toLowerCase().trim();
+        const results = [];
+
+        this.searchIndex.forEach(item => {
+            let score = 0;
+            let matchedFields = [];
+
+            // 标题匹配 (权重最高)
+            if (item.title && item.title.toLowerCase().includes(searchTerm)) {
+                score += 10;
+                matchedFields.push('title');
+            }
+
+            // 描述/摘要匹配
+            if (item.excerpt && item.excerpt.toLowerCase().includes(searchTerm)) {
+                score += 5;
+                matchedFields.push('excerpt');
+            }
+
+            // 分类匹配
+            if (item.category && item.category.toLowerCase().includes(searchTerm)) {
+                score += 3;
+                matchedFields.push('category');
+            }
+
+            // 章节/标签匹配
+            if (item.section && item.section.toLowerCase().includes(searchTerm)) {
+                score += 2;
+                matchedFields.push('section');
+            }
+
+            // 标签匹配 (安全处理)
+            if (item.tags && Array.isArray(item.tags)) {
+                item.tags.forEach(tag => {
+                    if (typeof tag === 'string' && tag.toLowerCase().includes(searchTerm)) {
+                        score += 2;
+                        matchedFields.push('tag');
+                    }
+                });
+            }
+
+            // 模糊匹配
+            if (score === 0 && item.searchableText && this.fuzzyMatch(item.searchableText, searchTerm)) {
+                score += 1;
+                matchedFields.push('fuzzy');
+            }
+
+            if (score > 0) {
+                results.push({
+                    ...item,
+                    score,
+                    matchedFields
+                });
+            }
+        });
+
+        // 按相关性排序
+        return results.sort((a, b) => b.score - a.score);
+    }
+
+    // 简单的模糊匹配算法
+    fuzzyMatch(text, pattern) {
+        let patternIndex = 0;
+        for (let i = 0; i < text.length && patternIndex < pattern.length; i++) {
+            if (text[i] === pattern[patternIndex]) {
+                patternIndex++;
+            }
+        }
+        return patternIndex === pattern.length;
+    }
+
+    // 显示搜索结果
+    displayResults(results, query) {
+        this.searchPlaceholder.style.display = 'none';
+        this.searchResults.style.display = 'block';
+
+        // 更新结果头部
+        this.resultsHeader.innerHTML = `
+            <span class="results-count">${results.length} 个结果</span>
+            <span class="search-query">"${query}"</span>
+        `;
+
+        // 清空之前的結果
+        this.resultsList.innerHTML = '';
+
+        if (results.length === 0) {
+            this.resultsList.innerHTML = `
+                <div class="no-results">
+                    <div class="no-results-icon">🔍</div>
+                    <p>没有找到相关结果</p>
+                    <small>尝试使用不同的关键词</small>
+                </div>
+            `;
+            return;
+        }
+
+        // 显示结果
+        results.forEach((result, index) => {
+            const resultElement = this.createResultElement(result, query);
+            this.resultsList.appendChild(resultElement);
+        });
+    }
+
+    // 创建搜索结果元素
+    createResultElement(result, query) {
+        const div = document.createElement('div');
+        div.className = 'search-result-item';
+
+        const isWork = result.type === 'work';
+        const categoryTag = isWork ?
+            `<span class="result-tag work-tag">作品</span>` :
+            `<span class="result-tag article-tag">文章</span>`;
+
+        // 为作品添加视频提示
+        const videoIndicator = isWork ?
+            `<span class="video-indicator">🎥 点击观看视频</span>` : '';
+
+        div.innerHTML = `
+            <div class="result-content">
+                <div class="result-header">
+                    ${categoryTag}
+                    <h3 class="result-title">${this.highlightText(result.title, query)}</h3>
+                    ${videoIndicator}
+                </div>
+                <p class="result-description">${this.highlightText(result.excerpt || result.description, query)}</p>
+                <div class="result-meta">
+                    <span class="result-category">${result.category || '技术'}</span>
+                    ${result.section ? `<span class="result-section">${result.section}</span>` : ''}
+                    ${result.date ? `<span class="result-date">${result.date}</span>` : ''}
+                </div>
+            </div>
+        `;
+
+        // 添加点击事件
+        div.addEventListener('click', () => {
+            if (result.link) {
+                // 文章：在同一页面打开
+                window.location.href = result.link;
+            } else if (result.video) {
+                // 作品：打开视频链接（新窗口）
+                window.open(result.video, '_blank');
+            } else if (result.demoLink) {
+                // 作品demo链接
+                window.open(result.demoLink, '_blank');
+            } else if (result.githubLink) {
+                // GitHub链接
+                window.open(result.githubLink, '_blank');
+            } else {
+                console.log('没有找到可用的链接:', result);
+            }
+        });
+
+        return div;
+    }
+
+    // 高亮匹配的文本
+    highlightText(text, query) {
+        if (!text || !query) return text || '';
+
+        const regex = new RegExp(`(${query})`, 'gi');
+        return text.replace(regex, '<mark>$1</mark>');
+    }
+}
+
 // Call initialization functions
 document.addEventListener('DOMContentLoaded', () => {
     initializeTooltips();
+
+    // 初始化搜索功能 - 简化版本
+    console.log('正在初始化搜索功能...');
+
+    // 检查DOM元素
+    const searchBtn = document.getElementById('searchBtn');
+    const searchModal = document.getElementById('searchModal');
+    console.log('搜索按钮:', searchBtn);
+    console.log('搜索模态框:', searchModal);
+
+    // 如果没有搜索模态框，创建一个简单的测试
+    if (!searchModal) {
+        console.log('创建简单的搜索测试功能');
+        if (searchBtn) {
+            searchBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                console.log('搜索按钮被点击了！');
+
+                // 创建简单的搜索模态框
+                const modal = document.createElement('div');
+                modal.style.cssText = `
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(0,0,0,0.8);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    z-index: 1000;
+                `;
+
+                modal.innerHTML = `
+                    <div style="background: #2A2A2A; padding: 2rem; border-radius: 20px; max-width: 500px; width: 90%;">
+                        <h2 style="color: white; margin-bottom: 1rem;">搜索功能测试</h2>
+                        <input type="text" placeholder="输入搜索关键词..." style="width: 100%; padding: 0.8rem; background: #1A1A1A; border: 1px solid #4A4A4C; color: white; border-radius: 8px; margin-bottom: 1rem;">
+                        <button onclick="this.closest('div').parentElement.remove()" style="background: #007AFF; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 8px; cursor: pointer;">关闭</button>
+                    </div>
+                `;
+
+                document.body.appendChild(modal);
+
+                // 点击背景关闭
+                modal.addEventListener('click', function(e) {
+                    if (e.target === modal) {
+                        modal.remove();
+                    }
+                });
+            });
+        }
+    } else {
+        // 使用完整的搜索功能
+        try {
+            const searchEngine = new SearchEngine();
+            console.log('搜索功能初始化完成');
+
+            // 全局暴露搜索功能用于调试
+            window.testSearch = () => {
+                if (searchEngine) {
+                    searchEngine.openSearch();
+                } else {
+                    console.error('搜索引擎未初始化');
+                }
+            };
+        } catch (error) {
+            console.error('搜索功能初始化失败:', error);
+        }
+    }
 });
 
 // Console welcome message

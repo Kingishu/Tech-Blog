@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>对象池测试3 - Tech Blog</title>
+    <title>C#对象的序列化与反序列化 - Tech Blog</title>
     <link rel="stylesheet" href="../styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
@@ -386,10 +386,10 @@
     <article>
         <div class="article-header">
             <div class="container">
-                  <h1 class="article-title">对象池测试3</h1>
+                  <h1 class="article-title">C#对象的序列化与反序列化</h1>
                 <div class="article-meta">
-                    <span>📅 2025-09-28</span>
-                    <span>🏷️ Unity开发-核心系统</span>
+                    <span>📅 2025-09-30</span>
+                    <span>🏷️ Unity笔记-数据持久化</span>
                     <span>⏱️ 阅读时间：2分钟</span>
                     <span>👤 Kingishu</span>
                 </div>
@@ -400,159 +400,154 @@
             <div class="container">
                 <div class="article-layout">
                     <div class="article-body">
-                        <h1 id="heading-unity核心技术面试文档对象池-object-pool">Unity核心技术面试文档：对象池 (Object Pool)</h1>
-<h2 id="heading-1-讲本质它是什么为什么需要它">1. 讲本质：它是什么，为什么需要它？</h2>
-<h3 id="heading-用途与原理">用途与原理</h3>
-<p>对象池（Object Pool）是一种 <strong>复用对象</strong> 的设计模式，核心目的是 <strong>优化性能和内存管理</strong>。</p>
-<p>在游戏中，我们经常需要频繁地创建和销毁同一类型的对象，比如子弹、敌人、特效等。常规的做法是需要时调用 <code>Instantiate()</code> 创建，不需要时调用 <code>Destroy()</code> 销毁。</p>
+                        <h2 id="heading-1-什么是序列化">1. 什么是序列化？</h2>
+<p><strong>序列化（Serialization）</strong> 是指将对象的状态信息转换为可以存储或传输的形式（例如字节流、文件、内存数据）的过程。<br>反之，<strong>反序列化（Deserialization）</strong> 则是将存储或传输的序列化数据还原为对象的过程。</p>
+<p>在 C# 中，最常用的方式是通过 <code>BinaryFormatter</code> 类来完成二进制序列化与反序列化。</p>
+<hr>
+<h2 id="heading-2-核心类与方法">2. 核心类与方法</h2>
 <ul>
-<li><strong><code>Instantiate()</code></strong>: 这个过程相对耗时，因为它需要向系统申请内存、创建GameObject、添加组件、初始化等。如果在同一帧内大量执行，会造成明显的CPU峰值，导致游戏卡顿。</li>
-<li><strong><code>Destroy()</code></strong>: 这个操作不会立即释放内存，而是将对象标记为“待回收”。当内存不足时，垃圾回收器（Garbage Collector, GC）会启动，扫描所有内存找出这些无用的对象并释放它们。GC的执行会暂停主线程，同样会导致游戏卡顿。</li>
-</ul>
-<p><strong>对象池的原理</strong> 就是：在游戏开始或某个合适的时机，<strong>预先创建一批对象</strong> 并将它们置于“非激活”状态存放起来（池化）。当你需要一个对象时，不是去创建新的，而是从池中“借”一个并激活它。当你用完这个对象后，不是销_destroy_它，而是将它“归还”到池中并设为非激活，以备下次使用。</p>
-<h3 id="heading-优缺点">优缺点</h3>
-<ul>
-<li><p><strong>优点</strong>:</p>
-<ol>
-<li><strong>性能提升</strong>: 避免了 <code>Instantiate()</code> 的运行时开销。</li>
-<li><strong>避免GC</strong>: 避免了 <code>Destroy()</code> 带来的垃圾回收，减少了GC引发的卡顿，让游戏运行更平滑。</li>
-<li><strong>响应迅速</strong>: 获取和归还对象通常比创建和销毁快得多。</li>
-</ol>
+<li><p><strong>BinaryFormatter.Serialize(Stream, object)</strong><br>  将对象序列化到指定的流中。</p>
 </li>
-<li><p><strong>缺点</strong>:</p>
-<ol>
-<li><strong>内存占用</strong>: 预先创建对象会占用更多启动内存。如果池的大小设置不当，可能会浪费内存。</li>
-<li><strong>管理复杂性</strong>: 需要编写额外的代码来管理池的逻辑，例如对象的获取、归还、重置状态等。</li>
-</ol>
+<li><p><strong>BinaryFormatter.Deserialize(Stream)</strong><br>  从指定的流中反序列化对象。</p>
 </li>
 </ul>
-<h2 id="heading-2-重面试面试官想听到什么">2. 重面试：面试官想听到什么？</h2>
-<p>面试官问对象池，主要想考察你对 <strong>Unity性能优化</strong> 的理解，特别是对 <strong>内存管理和GC</strong> 的认识。</p>
-<h3 id="heading-考点与关注点">考点与关注点</h3>
-<ol>
-<li><p><strong>为什么用对象池？(Why)</strong></p>
-<ul>
-<li><strong>核心答案</strong>: 为了避免 <code>Instantiate()</code> 和 <code>Destroy()</code> 带来的CPU开销和GC。这是最重要的点。你要能清晰地讲出这两者如何导致性能问题。</li>
-</ul>
-</li>
-<li><p><strong>什么时候用对象池？(When)</strong></p>
-<ul>
-<li><strong>核心答案</strong>: 用于 <strong>生命周期短、需要被频繁创建和销毁</strong> 的对象。</li>
-<li><strong>具体例子</strong>: 子弹、重复出现的敌人、UI元素（如下拉列表的条目）、粒子特效等。</li>
-</ul>
-</li>
-<li><p><strong>如何实现一个对象池？(How)</strong></p>
-<ul>
-<li>你需要能描述出基本结构：一个容器（通常是 <code>Queue</code> 或 <code>Stack</code>，因为它们的 <code>Enqueue/Dequeue</code> 或 <code>Push/Pop</code> 操作效率是O(1)）、一个获取（<code>Get</code>）方法和一个归还（<code>Return</code>）方法。</li>
-<li><strong>进阶考点</strong>:<ul>
-<li><strong>池容量问题</strong>: 如果池空了怎么办？是动态扩容（再<code>Instantiate</code>一个新的）还是返回<code>null</code>？这取决于设计需求，能说出这个权衡点会加分。</li>
-<li><strong>对象状态重置</strong>: 归还对象时，一定要记得重置它的状态（如位置、速度、生命值等），否则下次取出来时会带有“脏数据”。</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p><strong>C#与Unity的差异</strong></p>
-<ul>
-<li>对象池这个 <strong>设计模式本身</strong> 是通用的，在任何C#程序里都可以用。</li>
-<li>但在 <strong>Unity环境下</strong>，它的价值被极大地放大了。因为<code>Instantiate</code>和<code>Destroy</code>操作的是<code>GameObject</code>，这不仅仅是C#层面的内存分配，还涉及到C++引擎底层的复杂操作。所以，在Unity中避免这两个API对性能的提升尤为显著。</li>
-</ul>
-</li>
-</ol>
-<h3 id="heading-我面试应该怎么回答">我面试应该怎么回答？</h3>
 <blockquote>
-<p>“面试官您好，关于对象池，我的理解是这样的：</p>
-<ol>
-<li><strong>首先，它是一种性能优化手段</strong>。核心思想是复用对象，而不是频繁地创建和销毁。</li>
-<li><strong>之所以需要它</strong>，是因为在Unity中，<code>Instantiate</code>操作会带来CPU开销，而<code>Destroy</code>操作会产生C#垃圾，当垃圾积累到一定程度时会触发GC（垃圾回收），GC会暂停主线程，导致游戏卡顿。对象池通过复用，从根本上避免了这两个问题。</li>
-<li><strong>它最适合用在</strong> 像子弹、特效、简单敌人这类生命周期短且会被大量重复使用的对象上。</li>
-<li><strong>实现上</strong>，通常我会用一个队列（Queue）来存放非激活的对象。提供一个<code>Get</code>方法来从队列中取对象并激活它，如果队列为空，可以根据策略选择实例化一个新的。再提供一个<code>Return</code>方法，当对象用完后，将它失活并放回队列中。最关键的一步是，在归还对象时一定要重置它的状态，比如位置、血量等，避免下次使用时数据错乱。”</li>
-</ol>
+<p>⚠️ 注意：从 .NET 5 开始，官方已经不推荐使用 <code>BinaryFormatter</code>（存在安全风险），更推荐 <code>System.Text.Json</code> 或 <code>XmlSerializer</code> 等。但在学习和理解基础时，仍可使用。</p>
 </blockquote>
-<h2 id="heading-3-给例子talk-is-cheap-show-me-the-code">3. 给例子：Talk is cheap, show me the code.</h2>
-<p>这是一个极简的对象池实现，足以在面试中清晰地说明你的思路。</p>
-<pre><code class="language-csharp">using System.Collections.Generic;
-using UnityEngine;
+<hr>
+<h2 id="heading-3-序列化方式">3. 序列化方式</h2>
+<h3 id="heading-31-文件流方式">3.1 文件流方式</h3>
+<p>通过 <strong>文件流（FileStream）</strong> 将对象直接保存到文件中。</p>
+<pre><code>csharp
 
-public class SimpleObjectPool : MonoBehaviour
+using System;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+
+[Serializable] // 必须标记为可序列化
+public class Person
 {
-    // 要池化的预制体
-    public GameObject prefabToPool;
-    // 池的初始大小
-    public int initialPoolSize = 10;
-
-    // 用队列来存储池中的对象，先进先出，符合“取用-归还”的逻辑
-    private Queue&lt;GameObject&gt; objectPool = new Queue&lt;GameObject&gt;();
-
-    void Start()
-    {
-        // 1. 游戏开始时，预先填充池
-        for (int i = 0; i &lt; initialPoolSize; i++)
-        {
-            GameObject obj = Instantiate(prefabToPool);
-            obj.SetActive(false); // 设为非激活
-            objectPool.Enqueue(obj); // 入队
-        }
-    }
-
-    // 2. 从池中获取对象的方法
-    public GameObject GetObjectFromPool()
-    {
-        // 如果池中有对象
-        if (objectPool.Count &gt; 0)
-        {
-            GameObject obj = objectPool.Dequeue(); // 出队
-            obj.SetActive(true); // 激活它
-            return obj;
-        }
-        // 如果池是空的，（可选策略）动态创建一个新的
-        else
-        {
-            Debug.LogWarning(&quot;Pool is empty. Instantiating a new object.&quot;);
-            GameObject obj = Instantiate(prefabToPool);
-            return obj;
-        }
-    }
-
-    // 3. 将对象归还到池中的方法
-    public void ReturnObjectToPool(GameObject obj)
-    {
-        // 关键：在归还前，可以重置对象状态
-        // 比如：
-        // obj.transform.position = Vector3.zero;
-        // obj.GetComponent&lt;Rigidbody&gt;().velocity = Vector3.zero;
-        
-        obj.SetActive(false); // 设为非激活
-        objectPool.Enqueue(obj); // 重新入队
-    }
+    public string Name;
+    public int Age;
 }
 
-// --- 如何使用 ---
-public class Spawner : MonoBehaviour
+class Program
 {
-    public SimpleObjectPool bulletPool;
-
-    void Update()
+    static void Main()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        Person p = new Person { Name = &quot;Tom&quot;, Age = 25 };
+
+        // 序列化到文件
+        using (FileStream fs = new FileStream(&quot;person.dat&quot;, FileMode.Create))
         {
-            // 从池中获取一个子弹
-            GameObject bullet = bulletPool.GetObjectFromPool();
-            bullet.transform.position = this.transform.position;
-            
-            // ... 发射子弹的逻辑 ...
-
-            // 假设子弹1秒后消失，我们用协程来模拟归还
-            StartCoroutine(ReturnBulletAfterTime(bullet, 1.0f));
+            BinaryFormatter formatter = new BinaryFormatter();
+            formatter.Serialize(fs, p);
         }
-    }
 
-    private System.Collections.IEnumerator ReturnBulletAfterTime(GameObject bullet, float delay)
-    {
-        yield return new WaitForSeconds(delay);
-        bulletPool.ReturnObjectToPool(bullet);
+        Console.WriteLine(&quot;对象已序列化到文件 person.dat&quot;);
     }
 }
 </code></pre>
+<h3 id="heading-32-内存流方式">3.2 内存流方式</h3>
+<p>通过 <strong>内存流（MemoryStream）</strong> 将对象序列化成字节数组，便于网络传输或自定义存储。</p>
+<pre><code>csharp
+
+using System;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+
+[Serializable]
+public class Person
+{
+    public string Name;
+    public int Age;
+}
+
+class Program
+{
+    static void Main()
+    {
+        Person p = new Person { Name = &quot;Alice&quot;, Age = 30 };
+        byte[] buffer;
+
+        // 序列化到内存流
+        using (MemoryStream ms = new MemoryStream())
+        {
+            BinaryFormatter formatter = new BinaryFormatter();
+            formatter.Serialize(ms, p);
+
+            buffer = ms.ToArray(); // 获取字节数组
+        }
+
+        // 可以将字节数组写入文件或通过网络传输
+        File.WriteAllBytes(&quot;person_bytes.dat&quot;, buffer);
+
+        Console.WriteLine(&quot;对象已序列化为字节数组并写入 person_bytes.dat&quot;);
+    }
+}
+</code></pre>
+<hr>
+<h2 id="heading-4-反序列化">4. 反序列化</h2>
+<h3 id="heading-41-从文件反序列化">4.1 从文件反序列化</h3>
+<pre><code>csharp
+
+using (FileStream fs = new FileStream(&quot;person.dat&quot;, FileMode.Open))
+{
+    BinaryFormatter formatter = new BinaryFormatter();
+    Person p = (Person)formatter.Deserialize(fs);
+
+    Console.WriteLine($&quot;Name: {p.Name}, Age: {p.Age}&quot;);
+}
+</code></pre>
+<h3 id="heading-42-从字节数组反序列化">4.2 从字节数组反序列化</h3>
+<pre><code>csharp
+
+byte[] buffer = File.ReadAllBytes(&quot;person_bytes.dat&quot;);
+
+using (MemoryStream ms = new MemoryStream(buffer))
+{
+    BinaryFormatter formatter = new BinaryFormatter();
+    Person p = (Person)formatter.Deserialize(ms);
+
+    Console.WriteLine($&quot;Name: {p.Name}, Age: {p.Age}&quot;);
+}
+</code></pre>
+<hr>
+<h2 id="heading-5-注意事项">5. 注意事项</h2>
+<ul>
+<li><p><strong>必须添加 <code>[Serializable]</code> 特性</strong><br>  否则对象无法被序列化。</p>
+</li>
+<li><p><strong>字段级别的控制</strong><br>  如果某些字段不想被序列化，可以使用 <code>[NonSerialized]</code> 特性修饰。</p>
+</li>
+</ul>
+<pre><code>csharp
+
+[NonSerialized]
+private string password;
+</code></pre>
+<ul>
+<li><p><strong>安全问题</strong><br>  <code>BinaryFormatter</code> 在反序列化时可能存在安全漏洞，不适合用于处理不受信任的数据。</p>
+</li>
+<li><p><strong>替代方案</strong></p>
+<ul>
+<li><p>文本序列化（如 <code>JsonSerializer</code>、<code>XmlSerializer</code>）</p>
+</li>
+<li><p>跨平台高性能方案（如 <code>MessagePack</code>、<code>Protobuf</code>）</p>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="heading-6-总结">6. 总结</h2>
+<ul>
+<li><p><strong>文件流序列化</strong>：直接将对象保存到磁盘文件中。</p>
+</li>
+<li><p><strong>内存流序列化</strong>：对象 → 字节数组 → 可保存或传输。</p>
+</li>
+<li><p><strong>反序列化</strong>：根据文件流或字节数组还原对象。</p>
+</li>
+</ul>
+<p>序列化与反序列化是 C# 中对象持久化与数据传输的核心知识点，实际开发中需结合安全性与场景选择合适的序列化方式。</p>
 
                     </div>
 
@@ -560,13 +555,16 @@ public class Spawner : MonoBehaviour
                     <div class="article-sidebar">
                         <div class="toc">
                             <h3>目录</h3>
-                            <ul><li><a href="#heading-1-讲本质它是什么为什么需要它">1. 讲本质：它是什么，为什么需要它？</a></li>
-    <li><a href="#heading-用途与原理">用途与原理</a></li>
-    <li><a href="#heading-优缺点">优缺点</a></li>
-<li><a href="#heading-2-重面试面试官想听到什么">2. 重面试：面试官想听到什么？</a></li>
-    <li><a href="#heading-考点与关注点">考点与关注点</a></li>
-    <li><a href="#heading-我面试应该怎么回答">我面试应该怎么回答？</a></li>
-<li><a href="#heading-3-给例子talk-is-cheap-show-me-the-code">3. 给例子：Talk is cheap, show me the code.</a></li></ul>
+                            <ul><li><a href="#heading-1-什么是序列化">1. 什么是序列化？</a></li>
+<li><a href="#heading-2-核心类与方法">2. 核心类与方法</a></li>
+<li><a href="#heading-3-序列化方式">3. 序列化方式</a></li>
+    <li><a href="#heading-31-文件流方式">3.1 文件流方式</a></li>
+    <li><a href="#heading-32-内存流方式">3.2 内存流方式</a></li>
+<li><a href="#heading-4-反序列化">4. 反序列化</a></li>
+    <li><a href="#heading-41-从文件反序列化">4.1 从文件反序列化</a></li>
+    <li><a href="#heading-42-从字节数组反序列化">4.2 从字节数组反序列化</a></li>
+<li><a href="#heading-5-注意事项">5. 注意事项</a></li>
+<li><a href="#heading-6-总结">6. 总结</a></li></ul>
                         </div>
                     </div>
                     

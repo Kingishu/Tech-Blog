@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>搜索功能测试</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #333;
+            color: #fff;
+        }
+        .test-btn {
+            background: #007AFF;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+        }
+        .test-btn:hover {
+            background: #0056CC;
+        }
+    </style>
+</head>
+<body>
+    <h1>搜索功能测试页面</h1>
+
+    <button class="test-btn" id="searchBtn">测试搜索按钮</button>
+    <button class="test-btn" onclick="testSearch()">手动触发搜索</button>
+    <button class="test-btn" onclick="testConsole()">检查控制台</button>
+
+    <div id="output"></div>
+
+    <script>
+        console.log('测试页面加载完成');
+
+        function testConsole() {
+            document.getElementById('output').innerHTML = '请打开浏览器控制台查看详细信息';
+            console.log('搜索按钮元素:', document.getElementById('searchBtn'));
+            console.log('所有按钮:', document.querySelectorAll('button'));
+        }
+
+        function testSearch() {
+            alert('搜索功能测试：如果你看到这个弹窗，说明JavaScript正常工作');
+        }
+
+        // 测试原始搜索按钮
+        const searchBtn = document.getElementById('searchBtn');
+        if (searchBtn) {
+            searchBtn.addEventListener('click', function() {
+                console.log('搜索按钮点击事件触发！');
+                alert('搜索按钮点击成功！');
+            });
+        } else {
+            console.error('搜索按钮未找到');
+        }
+    </script>
+</body>
+</html>

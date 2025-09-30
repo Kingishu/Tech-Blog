@@ -24,6 +24,11 @@
                     <li class="nav-item"><a href="#articles" class="nav-link">文章</a></li>
                     <li class="nav-item"><a href="#about" class="nav-link">关于</a></li>
                     <li class="nav-item"><a href="#contact" class="nav-link">联系</a></li>
+                    <li class="nav-item search-item">
+                        <button class="search-btn" id="searchBtn" aria-label="搜索">
+                            <span class="search-icon">🔍</span>
+                        </button>
+                    </li>
                 </ul>
                 <div class="hamburger">
                     <span></span>
@@ -181,6 +186,32 @@
             </div>
         </section>
     </main>
+
+    <!-- Search Modal -->
+    <div class="search-modal" id="searchModal">
+        <div class="search-overlay" id="searchOverlay"></div>
+        <div class="search-container">
+            <div class="search-header">
+                <div class="search-input-wrapper">
+                    <span class="search-input-icon">🔍</span>
+                    <input type="text" class="search-input" id="searchInput" placeholder="搜索文章标题、内容或标签..." autocomplete="off">
+                    <button class="search-clear" id="searchClear" aria-label="清除搜索">✕</button>
+                </div>
+                <button class="search-close" id="searchClose" aria-label="关闭搜索">✕</button>
+            </div>
+            <div class="search-content" id="searchContent">
+                <div class="search-placeholder" id="searchPlaceholder">
+                    <div class="placeholder-icon">🔍</div>
+                    <p>输入关键词开始搜索</p>
+                    <small>支持搜索标题、内容和分类</small>
+                </div>
+                <div class="search-results" id="searchResults" style="display: none;">
+                    <div class="results-header" id="resultsHeader"></div>
+                    <div class="results-list" id="resultsList"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <footer class="footer">
         <div class="container">
