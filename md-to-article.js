@@ -631,15 +631,13 @@ function generateArticleHTML(metadata, markdownContent) {
                 <div class="footer-section">
                     <h4>技术栈</h4>
                     <ul class="footer-links">
-                        <li><a href="#">JavaScript</a></li>
-                        <li><a href="#">React</a></li>
-                        <li><a href="#">Node.js</a></li>
-                        <li><a href="#">TypeScript</a></li>
+                        <li><a href="#">Unity</a></li>
+                        <li><a href="#">C#</a></li>
                     </ul>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2024 Tech Blog. All rights reserved.</p>
+                <p>&copy; 2025 Tech Blog. All rights reserved.</p>
             </div>
         </div>
     </footer>

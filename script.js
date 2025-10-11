@@ -556,11 +556,21 @@ const articlesCatalog = [
 // 文章数据库配置（扁平化用于卡片显示）
 const articlesDatabase = [
     {
+        title: 'Git使用教程',
+        excerpt: 'FileStream文件流相关操作',
+        category: '项目开发',
+        section: '版本控制',
+        date: '2025-10-05',
+        gradient: 'gradient-5',
+        link: 'article/git使用教程.html',
+        readTime: '10分钟'
+    },
+    {
         title: 'C#对象的序列化与反序列化',
         excerpt: 'FileStream文件流相关操作',
         category: 'Unity笔记',
         section: '数据持久化',
-        date: '2025-09-30',
+        date: '2025-10-05',
         gradient: 'gradient-5',
         link: 'article/c-对象的序列化与反序列化.html',
         readTime: '4分钟'
@@ -570,7 +580,7 @@ const articlesDatabase = [
         excerpt: 'FileStream文件流相关操作',
         category: 'Unity笔记',
         section: '数据持久化',
-        date: '2025-09-30',
+        date: '2025-10-05',
         gradient: 'gradient-5',
         link: 'article/filestream文件流.html',
         readTime: '4分钟'
